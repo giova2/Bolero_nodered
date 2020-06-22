@@ -1,0 +1,85 @@
+#statusPinos {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100vw;
+  height: 100vh;
+  /*background:green;*/
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ff2111+0,f9f900+47,004ce5+100 */
+  background: rgba(0, 25, 168, 1);
+  background: -moz-linear-gradient(
+    left,
+    rgba(0, 25, 168, 1) 0%,
+    rgba(199, 179, 127, 1) 20%,
+    rgba(255, 221, 0, 1) 50%,
+    rgba(255, 255, 255, 1) 80%,
+    rgba(213, 42, 30, 1) 100%
+  );
+  background: -webkit-gradient(
+    left top,
+    right top,
+    color-stop(0%, rgba(0, 25, 168, 1)),
+    color-stop(20%, rgba(199, 179, 127, 1)),
+    color-stop(50%, rgba(255, 221, 0, 1)),
+    color-stop(80%, rgba(255, 255, 255, 1)),
+    color-stop(100%, rgba(213, 42, 30, 1))
+  );
+  background: -webkit-linear-gradient(
+    left,
+    rgba(0, 25, 168, 1) 0%,
+    rgba(199, 179, 127, 1) 20%,
+    rgba(255, 221, 0, 1) 50%,
+    rgba(255, 255, 255, 1) 80%,
+    rgba(213, 42, 30, 1) 100%
+  );
+  background: -o-linear-gradient(
+    left,
+    rgba(0, 25, 168, 1) 0%,
+    rgba(199, 179, 127, 1) 20%,
+    rgba(255, 221, 0, 1) 50%,
+    rgba(255, 255, 255, 1) 80%,
+    rgba(213, 42, 30, 1) 100%
+  );
+  background: -ms-linear-gradient(
+    left,
+    rgba(0, 25, 168, 1) 0%,
+    rgba(199, 179, 127, 1) 20%,
+    rgba(255, 221, 0, 1) 50%,
+    rgba(255, 255, 255, 1) 80%,
+    rgba(213, 42, 30, 1) 100%
+  );
+  background: linear-gradient(
+    to right,
+    rgba(0, 25, 168, 1) 0%,
+    rgba(199, 179, 127, 1) 20%,
+    rgba(255, 221, 0, 1) 50%,
+    rgba(255, 255, 255, 1) 80%,
+    rgba(213, 42, 30, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0019a8', endColorstr='#d52a1e', GradientType=1 );
+}
+
+.pino-container {
+  position: relative;
+}
+
+/*.pino, .pino-ausente{*/
+.pino.ausente {
+  opacity: 0.1;
+}
+.pino {
+  width: 5vw;
+  height: 23vh;
+  margin-left: 5vw;
+  margin-right: 5vw;
+  opacity: 1;
+}
+.pino {
+  z-index: 2;
+}
+/*.pino-ausente{*/
+/*    position:absolute;*/
+/*    left:0px;*/
+/*    top: 0px;*/
+/*    z-index: 1;*/
+/*}*/

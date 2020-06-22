@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<!-- Note that adding an appcache really speeds things up after the first load
+    You need to amend the appcache file to meet your needs.
+    Don't forget to change the appcache file if you update ANY
+    of the files in it otherwise the old versions will ALWAYS be used.
+<html lang="en" manifest="./uibuilder.appcache">
+-->
+<html lang="en">
+  <!--
+    This is the default, template html for uibuilder.
+    It is meant to demonstrate the use of VueJS & bootstrap-vue to dynamically
+    update the ui based on incoming/outgoing messages from/to the
+    Node-RED server.
+
+    You will want to alter this to suite your own needs. To do so,
+    copy this file to <userDir>/uibuilder/<url>/src.
+-->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes"
+    />
+
+    <title>BOLERO</title>
+    <meta
+      name="description"
+      content="Node-RED UI Builder - VueJS + bootstrap-vue version"
+    />
+
+    <link rel="icon" href="./images/node-blue.ico" />
+
+    <!-- See https://goo.gl/OOhYW5 -->
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="theme-color" content="#3f51b5" />
+
+    <!-- Used if adding to homescreen for Chrome on Android. Fallback for manifest.json -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Node-RED UI Builder" />
+
+    <!-- Used if adding to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Node-RED UI Builder" />
+
+    <!-- Homescreen icons for Apple mobile use if required
+        <link rel="apple-touch-icon" href="./images/manifest/icon-48x48.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="./images/manifest/icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="96x96" href="./images/manifest/icon-96x96.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="./images/manifest/icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="192x192" href="./images/manifest/icon-192x192.png">
+    -->
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="../uibuilder/vendor/bootstrap/dist/css/bootstrap.min.css"
+    />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="../uibuilder/vendor/bootstrap-vue/dist/bootstrap-vue.css"
+    />
+
+    <link rel="stylesheet" href="./index.css" media="all" />
+    <link rel="stylesheet" href="./animate.css" />
+    <!--<link rel="stylesheet" href="./tablero.css" media="all">-->
+    <link rel="stylesheet" href="./tablero-flex.css" media="all" />
+    <link rel="stylesheet" href="./pinos.css" media="all" />
+    <link rel="stylesheet" href="./animaciones.css" media="all" />
+    <link rel="stylesheet" href="./publicidad.css" media="all" />
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <div class="d-flex flex-column tablero">
+        <div
+          v-for="(item, index) in items"
+          :key="index"
+          class="info-jugador d-flex flex-row"
+          v-bind:class="{ tirador: values.jugadorlanza !== '' && index == values.jugadorlanza }"
+          v-bind:data-jugador="item.player"
+        >
+          <!-- Si falla la prueba de los containers y rows seguir con esto -->
+          <div class="jugador align-self-center">
+            <p>{{ parseNamePlayer(item.player) }}</p>
+          </div>
+          <div class="puntaje parcial">
+            <div class="d-flex">
+              <div class="tiro primero">
+                <p>{{ item.primero.first }}</p>
+              </div>
+              <div class="tiro segundo">
+                <p>{{ item.primero.second}}</p>
+              </div>
+            </div>
+            <div>
+              <p class="puntos">{{ item.primero.score }}</p>
+            </div>
+          </div>
+          <div class="puntaje parcial">
+            <div class="d-flex">
+              <div class="tiro primero">
+                <p>{{ item.segundo.first }}</p>
+              </div>
+              <div class="tiro segundo">
+                <p>{{ item.segundo.second}}</p>
+              </div>
+            </div>
+            <div>
+              <p class="puntos">{{ item.segundo.score }}</p>
+            </div>
+          </div>
+          <div class="puntaje parcial">
+            <div class="d-flex">
+              <div class="tiro primero">
+                <p>{{ item.tercero.first }}</p>
+              </div>
+              <div class="tiro segundo">
+                <p>{{ item.tercero.second}}</p>
+              </div>
+            </div>
+            <div>
+              <p class="puntos">{{ item.tercero.score }}</p>
+            </div>
+          </div>
+          <div class="puntaje parcial">
+            <div class="d-flex">
+              <div class="tiro primero">
+                <p>{{ item.cuarto.first }}</p>
+              </div>
+              <div class="tiro segundo">
+                <p>{{ item.cuarto.second}}</p>
+              </div>
+            </div>
+            <div>
+              <p class="puntos">{{ item.cuarto.score }}</p>
+            </div>
+          </div>
+          <div class="puntaje parcial">
+            <div class="d-flex">
+              <div class="tiro primero">
+                <p>{{ item.quinto.first }}</p>
+              </div>
+              <div class="tiro segundo">
+                <p>{{ item.quinto.second}}</p>
+              </div>
+            </div>
+            <div>
+              <p class="puntos">{{ item.quinto.score }}</p>
+            </div>
+          </div>
+          <div class="puntaje parcial">
+            <div class="d-flex">
+              <div class="tiro primero">
+                <p>{{ item.sexto.first }}</p>
+              </div>
+              <div class="tiro segundo">
+                <p>{{ item.sexto.second}}</p>
+              </div>
+            </div>
+            <div>
+              <p class="puntos">{{ item.sexto.score }}</p>
+            </div>
+          </div>
+          <div class="puntaje parcial">
+            <div class="d-flex">
+              <div class="tiro primero">
+                <p>{{ item.septimo.first }}</p>
+              </div>
+              <div class="tiro segundo">
+                <p>{{ item.septimo.second}}</p>
+              </div>
+            </div>
+            <div>
+              <p class="puntos">{{ item.septimo.score }}</p>
+            </div>
+          </div>
+          <div class="puntaje parcial">
+            <div class="d-flex">
+              <div class="tiro primero">
+                <p>{{ item.octavo.first }}</p>
+              </div>
+              <div class="tiro segundo">
+                <p>{{ item.octavo.second}}</p>
+              </div>
+            </div>
+            <div>
+              <p class="puntos">{{ item.octavo.score }}</p>
+            </div>
+          </div>
+          <div class="puntaje parcial">
+            <div class="d-flex">
+              <div class="tiro primero">
+                <p>{{ item.noveno.first }}</p>
+              </div>
+              <div class="tiro segundo">
+                <p>{{ item.noveno.second}}</p>
+              </div>
+            </div>
+            <div>
+              <p class="puntos">{{ item.noveno.score }}</p>
+            </div>
+          </div>
+          <div class="puntaje parcial">
+            <div class="d-flex">
+              <div class="tres tiro primero">
+                <p>{{ item.decimo.first }}</p>
+              </div>
+              <div class="tres tiro segundo">
+                <p>{{ item.decimo.second}}</p>
+              </div>
+              <div class="tres tiro tercero">
+                <p>{{ item.decimo.third}}</p>
+              </div>
+            </div>
+            <div>
+              <p class="puntos">{{ item.decimo.score }}</p>
+            </div>
+          </div>
+          <div class="puntaje final align-self-center">
+            <p>{{ item.final }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ************************************* Publicidad *************************************-->
+      <div id="publicidad" class="">
+        <h1 style="position: absolute; top: 45vh; left: 10vw;">
+          Este div se muestra hasta que se abra el juego
+        </h1>
+      </div>
+      <!-- ************************************* Publicidad *************************************-->
+
+      <!-- ************************************* animaciones *************************************-->
+      <div class="d-flex">
+        <b-button @click="abrirJuego(true)" variant="success">
+          Comenzar Juego
+        </b-button>
+        <b-button @click="abrirJuego(false)" variant="danger">
+          Terminar Juego
+        </b-button>
+      </div>
+      <div class="d-flex">
+        <label>Animaciones</label>
+        <b-button @click="animacionStrike" variant="success">
+          Strike!
+        </b-button>
+        <b-button @click="animacionSpare" variant="info">
+          Spare!
+        </b-button>
+        <b-button @click="animacionFinish" variant="primary">
+          Final de juego
+        </b-button>
+        <b-button @click="animacionBolaFuera" variant="primary">
+          Bola Fuera
+        </b-button>
+        <b-button @click="animacionEspera" variant="secondary">
+          Espera
+        </b-button>
+        <b-button @click="animacionTiro" variant="danger">
+          Tiro
+        </b-button>
+      </div>
+      <div class="d-flex">
+        <label>Juego</label>
+        <b-button @click="pinos" variant="success">
+          {{ divPinosOculto ? 'Ver pinos' : 'Ocultar pinos'}}
+        </b-button>
+      </div>
+
+      <div id="strike" class="hide animacion strike bg">
+        <!--<video id="strikeVideo" class="hide" src="./images/stike1.mp4" ></video>-->
+        <img id="strikeVideo" src="" />
+      </div>
+      <div id="strikeWord" class="hide animacion strike">
+        <h1>STRIKE!!</h1>
+        <img class="hide" src="./images/comic-boom.png" />
+      </div>
+
+      <div id="spare" class="hide animacion spare bg">
+        <img id="spareVideo" src="" />
+      </div>
+      <div id="spareWord" class="hide animacion spare">
+        <h1>SPARE!</h1>
+        <img class="hide" src="./images/comic-boom.png" />
+      </div>
+
+      <div id="finish" class="hide animacion finish bg">
+        <img id="finishVideo" src="./images/finish.gif" />
+      </div>
+      <div id="finishWord" class="hide animacion finish">
+        <div class="textos">
+          <h1>Juego Finalizado</h1>
+          <h2>Felicitaciones {{ ganador }}</h2>
+        </div>
+      </div>
+
+      <div id="bolaFuera" class="hide animacion bola-fuera bg">
+        <img id="bolaFueraVideo" src="" />
+      </div>
+      <div id="bolaFueraWord" class="hide animacion bola-fuera">
+        <h1>Bola Fuera</h1>
+      </div>
+
+      <div id="espera" class="hide animacion espera bg">
+        <img id="esperaVideo" src="" />
+      </div>
+      <div id="esperaWord" class="hide animacion espera">
+        <h1>Espera</h1>
+      </div>
+
+      <div id="tirar" class="hide animacion tirar bg">
+        <img id="tirarVideo" src="" />
+      </div>
+      <div id="tirarWord" class="hide animacion tirar">
+        <h1>Tiro</h1>
+      </div>
+
+      <!-- ************************************* animaciones *************************************-->
+
+      <!-- ************************************* Pinos *************************************-->
+
+      <div id="statusPinos" class="hide">
+        <div class="d-flex flex-column justify-content-center mt-2">
+          <div class="d-flex flex-row justify-content-center">
+            <div class="pino-container">
+              <img
+                id="pino6"
+                class="pino"
+                v-bind:class="{ ausente: statusPinos[6] == false }"
+                src="./images/pino.png"
+              />
+            </div>
+            <div class="pino-container">
+              <img
+                id="pino7"
+                class="pino"
+                v-bind:class="{ ausente: statusPinos[7] == false }"
+                src="./images/pino.png"
+              />
+            </div>
+            <div class="pino-container">
+              <img
+                id="pino8"
+                class="pino"
+                v-bind:class="{ ausente: statusPinos[8] == false }"
+                src="./images/pino.png"
+              />
+            </div>
+            <div class="pino-container">
+              <img
+                id="pino9"
+                class="pino"
+                v-bind:class="{ ausente: statusPinos[9] == false }"
+                src="./images/pino.png"
+              />
+            </div>
+          </div>
+          <div class="d-flex flex-row justify-content-center">
+            <div class="pino-container">
+              <img
+                id="pino3"
+                class="pino"
+                v-bind:class="{ ausente: statusPinos[3] == false }"
+                src="./images/pino.png"
+              />
+            </div>
+            <div class="pino-container">
+              <img
+                id="pino4"
+                class="pino"
+                v-bind:class="{ ausente: statusPinos[4] == false }"
+                src="./images/pino.png"
+              />
+            </div>
+            <div class="pino-container">
+              <img
+                id="pino5"
+                class="pino"
+                v-bind:class="{ ausente: statusPinos[5] == false }"
+                src="./images/pino.png"
+              />
+            </div>
+          </div>
+          <div class="d-flex flex-row justify-content-center">
+            <div class="pino-container">
+              <img
+                id="pino1"
+                class="pino"
+                v-bind:class="{ ausente: statusPinos[1] == false }"
+                src="./images/pino.png"
+              />
+            </div>
+            <div class="pino-container">
+              <img
+                id="pino2"
+                class="pino"
+                v-bind:class="{ ausente: statusPinos[2] == false }"
+                src="./images/pino.png"
+              />
+            </div>
+          </div>
+          <div class="d-flex flex-row justify-content-center">
+            <div class="pino-container">
+              <img
+                id="pino0"
+                class="pino"
+                v-bind:class="{ ausente: statusPinos[0] == false }"
+                src="./images/pino.png"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ************************************* Pinos *************************************-->
+
+      <div class="d-flex flex-row justify-content-center debug" style="">
+        <div style="width: 33%;">
+          <h2>VALORES</h2>
+          <pre style="background: black; font-size: 2rem; color: green;">
+                        {{ values }}
+                    </pre
+          >
+        </div>
+        <div style="width: 33%;">
+          <h2>Items</h2>
+          <pre style="background: black; font-size: 2rem; color: green;">
+                        {{ items }}
+                    </pre
+          >
+        </div>
+        <div style="width: 33%;">
+          <h2>Pinos</h2>
+          <pre style="background: black; font-size: 2rem; color: green;">
+                        {{ statusPinos }}
+                    </pre
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- These MUST be in the right order. Note no leading / -->
+    <!-- REQUIRED: Socket.IO is loaded only once for all instances
+                     Without this, you don't get a websocket connection -->
+    <script src="../uibuilder/vendor/socket.io/socket.io.js"></script>
+
+    <!-- --- Vendor Libraries - Load in the right order --- -->
+    <script src="../uibuilder/vendor/vue/dist/vue.js"></script>
+    <!-- dev version with component compiler -->
+    <!-- <script src="../uibuilder/vendor/vue/dist/vue.min.js"></script>   prod version with component compiler -->
+    <!-- <script src="../uibuilder/vendor/vue/dist/vue.runtime.min.js"></script>   prod version without component compiler -->
+    <script src="../uibuilder/vendor/bootstrap-vue/dist/bootstrap-vue.js"></script>
+    <script src="../uibuilder/vendor/gsap/dist/gsap.min.js"></script>
+    <script src="../uibuilder/vendor/jquery/dist/jquery.min.js"></script>
+
+    <!-- REQUIRED: Sets up Socket listeners and the msg object -->
+    <!-- <script src="./uibuilderfe.js"></script>   //dev version -->
+    <script src="./uibuilderfe.min.js"></script>
+    <!--    //prod version -->
+    <!-- OPTIONAL: You probably want this. Put your custom code here -->
+    <script src="./index.js"></script>
+  </body>
+</html>

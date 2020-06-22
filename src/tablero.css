@@ -1,0 +1,82 @@
+table{
+    height: 99vh;
+    color: white !important;
+    text-shadow: 3px 3px 3px orange;
+}
+
+table tr{
+    transition: all 0.5s cubic-bezier(0.71, 0.01, 1,-0.08);
+}
+
+.tirador{
+    background:yellow;
+    color:black;
+}
+
+.puntaje, 
+.jugador{
+    font-family: "bolero";
+    font-size: 1rem;
+    height: 16vh;
+    margin-bottom: 0px;
+}
+
+.jugador {
+    border: black solid 2px !important;
+}
+
+.jugador p,
+.puntaje.final p,
+.puntaje.parcial p{
+    font-size:2rem;
+    margin-bottom:0px;
+}
+
+.jugador p{
+    margin-top: 2.4vw;
+}
+
+.puntaje.parcial{
+    width: 7vw;
+}
+
+.puntaje.parcial.ultimo{
+    width: 10vw;
+}
+
+/* esto es el p donde se va colocando el puntaje parcial del tiro */
+.puntos{
+    margin-top: 1vw;
+}
+
+
+.puntaje.final p{
+    margin-top: 3vw;
+}
+
+.puntaje.final,
+.puntaje.parcial{
+    padding: 0px;
+    border: black solid 2px;
+}
+
+/*defino la altura de las casillas que sirven para el puntaje parcial y la cantidad de pinos que se han volteado*/
+.tiro{
+    min-height: 4.5vw;
+    max-height: 4.5vw;
+}
+.tiro p{
+    margin-top:1vw;
+}
+
+.tiro{
+    border-bottom:white solid 2px;
+}
+
+.tiro.segundo{
+    border-left:white solid 2px;
+}
+
+.tiro.tercero{
+    border-left:white solid 2px;
+}

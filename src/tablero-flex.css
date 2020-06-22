@@ -1,0 +1,93 @@
+@font-face {
+  font-family: "bolero";
+  src: url("bolero.woff2");
+}
+
+.tablero{
+    height: 100vh;
+    color: white !important;
+    text-shadow: 3px 3px 3px orange;
+}
+
+.tablero .info-jugador{
+    flex-grow:1;
+    transition: all 0.5s cubic-bezier(0.71, 0.01, 1,-0.08);
+    border: yellow solid 1px !important;
+}
+
+.tirador{
+    background:yellow;
+    color:black;
+}
+
+.puntaje, 
+.jugador{
+    font-family: "bolero";
+    font-size: 2.5rem;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.jugador {
+    width: 15vw;
+}
+
+.jugador p,
+.puntaje.final p,
+.puntaje.parcial p{
+    font-size: 1.5rem;
+    overflow-wrap: break-word;
+}
+
+.puntaje.parcial{
+    width: 7vw;
+}
+
+.puntaje.parcial.ultimo{
+    width: 10vw;
+}
+
+.puntaje.parcial > div{
+    height:50%;
+}
+
+/* esto es el p donde se va colocando el puntaje parcial del tiro */
+
+.puntaje.final{
+    width: 5vw;
+}
+
+.puntaje.final,
+.puntaje.parcial{
+    /*padding: 0px;*/
+}
+
+.puntaje.parcial{
+    border: black solid 2px;
+}
+
+/*defino la altura de las casillas que sirven para el puntaje parcial y la cantidad de pinos que se han volteado*/
+.tiro{
+    font-size:2.5rem;
+}
+
+.tiro p{
+    /*margin-top:auto;*/
+}
+
+.tiro{
+    width:50%;
+    border-bottom:white solid 2px;
+}
+
+.tiro.tres{
+    width:33%;
+}
+
+.tiro.segundo{
+    border-left:white solid 2px;
+}
+
+.tiro.tercero{
+    border-left:white solid 2px;
+}
