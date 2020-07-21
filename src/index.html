@@ -29,7 +29,7 @@
       content="Node-RED UI Builder - VueJS + bootstrap-vue version"
     />
 
-    <link rel="icon" href="./images/node-blue.ico" />
+    <link rel="icon" href="./images/pino.ico" />
 
     <!-- See https://goo.gl/OOhYW5 -->
     <link rel="manifest" href="./manifest.json" />
@@ -47,13 +47,31 @@
     />
     <meta name="apple-mobile-web-app-title" content="Node-RED UI Builder" />
 
-    <!-- Homescreen icons for Apple mobile use if required
-        <link rel="apple-touch-icon" href="./images/manifest/icon-48x48.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="./images/manifest/icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="96x96" href="./images/manifest/icon-96x96.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="./images/manifest/icon-144x144.png">
-        <link rel="apple-touch-icon" sizes="192x192" href="./images/manifest/icon-192x192.png">
-    -->
+    <link rel="preload" as="video" href="./images/spare.webm" type="video/webm" />
+    <link rel="preload" as="video" href="./images/tiro.webm" type="video/webm" />
+    <link rel="preload" as="video" href="./images/espera.webm" type="video/webm" />
+    <link rel="preload" as="video" href="./images/bola-fuera.webm" type="video/webm" />
+    <link rel="preload" as="video" href="./images/strikeGif.webm" type="video/webm" />
+    <link rel="preload" as="video" href="./images/finish.webm"  type="video/webm" />
+    <link rel="preload" as="font"  href="bolero.woff2" type="font/woff2" crossorigin>
+    
+    <link rel="preload" as="script" href="../uibuilder/vendor/socket.io/socket.io.js" />
+    <link rel="preload" as="script" href="../uibuilder/vendor/vue/dist/vue.min.js" />
+    <link rel="preload" as="script" href="../uibuilder/vendor/bootstrap-vue/dist/bootstrap-vue.min.js"/>
+    <link rel="preload" as="script" href="../uibuilder/vendor/gsap/dist/gsap.min.js"/>
+    <link rel="preload" as="script" href="../uibuilder/vendor/jquery/dist/jquery.min.js"/>
+    <link rel="preload" as="script" href="./uibuilderfe.min.js"/>
+    <link rel="preload" as="script" href="./index.js"/>
+    
+    <link rel="preload" as="style" href="../uibuilder/vendor/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="preload" as="style" href="../uibuilder/vendor/bootstrap-vue/dist/bootstrap-vue.min.css" />
+    <link rel="preload" as="style" href="./publicidad.css" />
+    <link rel="preload" as="style" href="./index.css" />
+    <link rel="preload" as="style" href="./animate.css" />
+    <link rel="preload" as="style" href="./tablero-flex.css"  />
+    <link rel="preload" as="style" href="./pinos.css"  />
+    <link rel="preload" as="style" href="./animaciones-beta.css" />
+    
     <link
       type="text/css"
       rel="stylesheet"
@@ -62,19 +80,25 @@
     <link
       type="text/css"
       rel="stylesheet"
-      href="../uibuilder/vendor/bootstrap-vue/dist/bootstrap-vue.css"
+      href="../uibuilder/vendor/bootstrap-vue/dist/bootstrap-vue.min.css"
     />
 
+    <link rel="stylesheet" href="./publicidad.css" media="all" />
     <link rel="stylesheet" href="./index.css" media="all" />
     <link rel="stylesheet" href="./animate.css" />
-    <!--<link rel="stylesheet" href="./tablero.css" media="all">-->
     <link rel="stylesheet" href="./tablero-flex.css" media="all" />
     <link rel="stylesheet" href="./pinos.css" media="all" />
-    <link rel="stylesheet" href="./animaciones.css" media="all" />
-    <link rel="stylesheet" href="./publicidad.css" media="all" />
+    <link rel="stylesheet" href="./animaciones-beta.css" media="all" />
   </head>
   <body>
     <div id="app" v-cloak>
+        <!-- ************************************* Publicidad *************************************-->
+          <div id="publicidad" class="">
+            <h1 style="position: absolute; top: 45vh; left: 10vw;">
+              Este div se muestra hasta que se abra el juego
+            </h1>
+          </div>
+          <!-- ************************************* Publicidad *************************************-->
       <div class="d-flex flex-column tablero">
         <div
           v-for="(item, index) in items"
@@ -184,7 +208,7 @@
                 <p>{{ item.octavo.first }}</p>
               </div>
               <div class="tiro segundo">
-                <p>{{ item.octavo.second}}</p>
+                <p>{{ item.octavo.second }}</p>
               </div>
             </div>
             <div>
@@ -197,7 +221,7 @@
                 <p>{{ item.noveno.first }}</p>
               </div>
               <div class="tiro segundo">
-                <p>{{ item.noveno.second}}</p>
+                <p>{{ item.noveno.second }}</p>
               </div>
             </div>
             <div>
@@ -210,10 +234,10 @@
                 <p>{{ item.decimo.first }}</p>
               </div>
               <div class="tres tiro segundo">
-                <p>{{ item.decimo.second}}</p>
+                <p>{{ item.decimo.second }}</p>
               </div>
               <div class="tres tiro tercero">
-                <p>{{ item.decimo.third}}</p>
+                <p>{{ item.decimo.third }}</p>
               </div>
             </div>
             <div>
@@ -226,43 +250,41 @@
         </div>
       </div>
 
-      <!-- ************************************* Publicidad *************************************-->
-      <div id="publicidad" class="">
-        <h1 style="position: absolute; top: 45vh; left: 10vw;">
-          Este div se muestra hasta que se abra el juego
-        </h1>
-      </div>
-      <!-- ************************************* Publicidad *************************************-->
-
       <!-- ************************************* animaciones *************************************-->
-      <div class="d-flex">
-        <b-button @click="abrirJuego(true)" variant="success">
-          Comenzar Juego
-        </b-button>
-        <b-button @click="abrirJuego(false)" variant="danger">
-          Terminar Juego
-        </b-button>
-      </div>
+      
+      <!-- ************************************* BOTONERA ************************************* -->
       <div class="d-flex">
         <label>Animaciones</label>
+        <div class="m-2">
         <b-button @click="animacionStrike" variant="success">
           Strike!
         </b-button>
+        </div>
+        <div class="m-2">
         <b-button @click="animacionSpare" variant="info">
           Spare!
         </b-button>
+        </div>
+        <div class="m-2">
         <b-button @click="animacionFinish" variant="primary">
           Final de juego
         </b-button>
+        </div>
+        <div class="m-2">
         <b-button @click="animacionBolaFuera" variant="primary">
           Bola Fuera
         </b-button>
+        </div>
+        <div class="m-2">
         <b-button @click="animacionEspera" variant="secondary">
           Espera
         </b-button>
+        </div>
+        <div class="m-2">
         <b-button @click="animacionTiro" variant="danger">
           Tiro
         </b-button>
+        </div>
       </div>
       <div class="d-flex">
         <label>Juego</label>
@@ -270,53 +292,141 @@
           {{ divPinosOculto ? 'Ver pinos' : 'Ocultar pinos'}}
         </b-button>
       </div>
+        <div class="d-flex flex-row justify-content-center">
+            <div class="m-2">
+                <h4>Flujo del juego</h4>
+            </div>  
+        </div>  
+        <div class="d-flex">
+            <div class="m-2">
+                <b-button @click="abrirJuego(true)" variant="success">
+                  Comenzar Juego
+                </b-button>
+            </div>
+            <div class="m-2">
+                <b-button @click="abrirJuego(false)" variant="danger">
+                  Terminar Juego
+                </b-button>
+            </div>
+        </div>
+      
+        <div class="d-flex flex-row justify-content-center">
+            <div class="m-2">
+                <select class="form-control" v-model="debugJugadores">
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
+                <b-button @click="cargarJugadores(debugJugadores)" variant="success">
+                  Cargar Jugadores
+                </b-button>
+            </div>
+            <div class="d-flex flex-row flex-wrap justify-content-center">
+                <div v-for="(item, index) in items" :key="index">
+                    <div class="m-2">
+                        <input placeholder="Cargue el nombre del jugador" class="form-control" type="text" v-model="item.player" @keyup="debugSetNombre(index)"/>
+                    </div>        
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="m-2 text-center" v-show="items.length > 0">
+                <h5>Indique quien va a lanzar</h5>
+                <div class="d-flex flex-row justify-content-center">
+                    <div v-for="(item, index) in items" :key="index" class="m-2">
+                        <b-button @click="indicaLanzador(index)" variant="success" class="lanzador-debug" v-show="item.player !== ''">
+                            {{ item.player }}
+                        </b-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-center">
+            <div class="m-2 text-center" v-show="items.length > 0">
+                <h5>Simulación de juego</h5>
+                <div class="d-flex flex-row flex-wrap">
+                    <div v-for="(item, index) in items" :key="index" class="m-2">
+                        <select v-model="debugPuntos[index]" class="form-control">
+                            <option value="0">0 (este valor se representa como 0 después del disparo)</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                        <b-button @click="debugTiro(index+1)" variant="success" v-show="item.player !== ''">
+                          Simular Tiro {{item.player}}
+                        </b-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- ************************************* BOTONERA ************************************* -->
 
       <div id="strike" class="hide animacion strike bg">
-        <!--<video id="strikeVideo" class="hide" src="./images/stike1.mp4" ></video>-->
-        <img id="strikeVideo" src="" />
+        <video id="strikeVideo" :src="gifs.strike.src" muted="muted" preload="auto"></video>
+        <!--<img id="strikeVideo" src="" />-->
       </div>
       <div id="strikeWord" class="hide animacion strike">
+        <div class="d-flex justify-content-center">
+            <img class="hide" src="./images/comic-boom.png" />
+        </div>
         <h1>STRIKE!!</h1>
-        <img class="hide" src="./images/comic-boom.png" />
       </div>
 
       <div id="spare" class="hide animacion spare bg">
-        <img id="spareVideo" src="" />
+          <video id="spareVideo" :src="gifs.spare.src" muted="muted" preload="auto"></video>
+        <!--<img id="spareVideo" src="" />-->
       </div>
       <div id="spareWord" class="hide animacion spare">
+        <div class="d-flex justify-content-center">
+            <img class="hide" src="./images/comic-boom.png" />
+        </div>
         <h1>SPARE!</h1>
-        <img class="hide" src="./images/comic-boom.png" />
       </div>
 
       <div id="finish" class="hide animacion finish bg">
-        <img id="finishVideo" src="./images/finish.gif" />
+        <video id="finishVideo" :src="gifs.finish.src" muted="muted" preload="auto"></video>
+        <!--<img id="finishVideo" src="./images/finish.gif" />-->
       </div>
       <div id="finishWord" class="hide animacion finish">
         <div class="textos">
           <h1>Juego Finalizado</h1>
-          <h2>Felicitaciones {{ ganador }}</h2>
+          <h2>Felicitaciones {{ parseNamePlayer(ganador) }}</h2>
         </div>
       </div>
 
       <div id="bolaFuera" class="hide animacion bola-fuera bg">
-        <img id="bolaFueraVideo" src="" />
+        <video id="bolaFueraVideo" :src="gifs.bolaFuera.src" muted="muted" preload="auto"></video>
+        <!--<img id="bolaFueraVideo" src="" />-->
       </div>
-      <div id="bolaFueraWord" class="hide animacion bola-fuera">
+      <div id="bolaFueraWord" class="hide animacion text bola-fuera">
         <h1>Bola Fuera</h1>
       </div>
 
       <div id="espera" class="hide animacion espera bg">
-        <img id="esperaVideo" src="" />
+        <video id="esperaVideo" :src="gifs.espera.src" muted="muted" preload="auto"></video>
+        <!--<img id="esperaVideo" src="" />-->
       </div>
-      <div id="esperaWord" class="hide animacion espera">
+      <div id="esperaWord" class="hide animacion text espera">
         <h1>Espera</h1>
       </div>
 
       <div id="tirar" class="hide animacion tirar bg">
-        <img id="tirarVideo" src="" />
+        <video id="tirarVideo" :src="gifs.tirar.src" muted="muted" preload="auto"></video>
+        <!--<img id="tirarVideo" src="" />-->
       </div>
-      <div id="tirarWord" class="hide animacion tirar">
-        <h1>Tiro</h1>
+      <div id="tirarWord" class="hide animacion text tirar">
+        <h1>Tiro {{ parseNamePlayer(values['jugador'+(parseInt(values.jugadorlanza)+1).toString()+'nombre']) }}</h1>
       </div>
 
       <!-- ************************************* animaciones *************************************-->
@@ -447,15 +557,14 @@
                      Without this, you don't get a websocket connection -->
     <script src="../uibuilder/vendor/socket.io/socket.io.js"></script>
 
-    <!-- --- Vendor Libraries - Load in the right order --- -->
-    <script src="../uibuilder/vendor/vue/dist/vue.js"></script>
+    <!-- Vendor Libraries - Load in the right order -->
+    <!--<script src="../uibuilder/vendor/vue/dist/vue.js"></script>-->
     <!-- dev version with component compiler -->
-    <!-- <script src="../uibuilder/vendor/vue/dist/vue.min.js"></script>   prod version with component compiler -->
+    <script src="../uibuilder/vendor/vue/dist/vue.min.js"></script>   <!-- prod version with component compiler  -->
     <!-- <script src="../uibuilder/vendor/vue/dist/vue.runtime.min.js"></script>   prod version without component compiler -->
-    <script src="../uibuilder/vendor/bootstrap-vue/dist/bootstrap-vue.js"></script>
+    <script src="../uibuilder/vendor/bootstrap-vue/dist/bootstrap-vue.min.js"></script>
     <script src="../uibuilder/vendor/gsap/dist/gsap.min.js"></script>
     <script src="../uibuilder/vendor/jquery/dist/jquery.min.js"></script>
-
     <!-- REQUIRED: Sets up Socket listeners and the msg object -->
     <!-- <script src="./uibuilderfe.js"></script>   //dev version -->
     <script src="./uibuilderfe.min.js"></script>

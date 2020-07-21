@@ -1,4 +1,4 @@
-/* jshint browser: true, esversion: 5, asi: true */
+/* jshinrt browser: true, esversion: 5, asi: true */
 /*globals Vue, uibuilder */
 // @ts-nocheck
 /*
@@ -19,7 +19,64 @@
 "use strict";
 
 /** @see https://github.com/TotallyInformation/node-red-contrib-uibuilder/wiki/Front-End-Library---available-properties-and-methods */
-
+const palabraClaveOpen = "open";
+const palabraClavePlayers = "players";
+const palabraClaveLanza = "jugadorlanza";
+const palabraClaveNombre = "nombre";
+const palabraClaveJugador = "jugador";
+const palabraClavePuntos = "puntos";
+const palabraClaveAccion = "accion";
+const tiros = [
+            "primero",
+            "segundo",
+            "tercero",
+            "cuarto",
+            "quinto",
+            "sexto",
+            "septimo",
+            "octavo",
+            "noveno",
+            "decimo",
+          ];
+const valuesInicial = {
+    open: null,
+    players: 0,
+    jugadorlanza: "",
+    accion: "",
+    jugador1nombre: "",
+    jugador1puntostiro: 0,
+    jugador1puntostotales: 0,
+    jugador2nombre: "",
+    jugador2puntostiro: 0,
+    jugador2puntostotales: 0,
+    jugador3nombre: "",
+    jugador3puntostiro: 0,
+    jugador3puntostotales: 0,
+    jugador4nombre: "",
+    jugador4puntostiro: 0,
+    jugador4puntostotales: 0,
+    jugador5nombre: "",
+    jugador5puntostiro: 0,
+    jugador5puntostotales: 0,
+    jugador6nombre: "",
+    jugador6puntostiro: 0,
+    jugador6puntostotales: 0,
+};
+const itemInicial = {
+    player: "",
+    actual: "primero",
+    primero: { first: '', second: '', score: '' },
+    segundo: { first: '', second: '', score: '' },
+    tercero: { first: '', second: '', score: '' },
+    cuarto: { first: '', second: '', score: '' },
+    quinto: { first: '', second: '', score: '' },
+    sexto: { first: '', second: '', score: '' },
+    septimo: { first: '', second: '', score: '' },
+    octavo: { first: '', second: '', score: '' },
+    noveno: { first: '', second: '', score: '' },
+    decimo: { first: '', second: '', third: '' },
+    final: '',
+};
 // eslint-disable-next-line no-unused-vars
 var app1 = new Vue({
   el: "#app",
@@ -53,72 +110,29 @@ var app1 = new Vue({
     },
     gifs: {
       strike: {
-        src: "./images/strikeGif.gif",
+        src: "./images/strikeGif.webm",
       },
       spare: {
-        src: "./images/spare.gif",
+        src: "./images/spare.webm",
       },
       bolaFuera: {
-        src: "./images/bola-fuera.gif",
+        src: "./images/bola-fuera.webm",
+      },
+      finish: {
+        src: "./images/finish.webm",
       },
       espera: {
-        src: "./images/espera.gif",
+        src: "./images/espera.webm",
       },
-      tiro: {
-        src: "./images/tiro.gif",
+      tirar: {
+        src: "./images/tiro.webm",
       },
     },
     ganador: "",
-    values: {
-      open: null,
-      players: 0,
-      jugadorlanza: "",
-      accion: "",
-      jugador1nombre: "",
-      jugador1puntostiro: "",
-      jugador1puntostotales: "",
-      jugador2nombre: "",
-      jugador2puntostiro: "",
-      jugador2puntostotales: "",
-      jugador3nombre: "",
-      jugador3puntostiro: "",
-      jugador3puntostotales: "",
-      jugador4nombre: "",
-      jugador4puntostiro: "",
-      jugador4puntostotales: "",
-      jugador5nombre: "",
-      jugador5puntostiro: "",
-      jugador5puntostotales: "",
-      jugador6nombre: "",
-      jugador6puntostiro: "",
-      jugador6puntostotales: "",
-    },
+    values: Object.assign({}, valuesInicial), //shallow copy
     statusPinos: [true, true, true, true, true, true, true, true, true, false], // el status de los pinos
     divPinosOculto: true,
-    // mapaTopics: {
-    //     'pista1/open' : 'p1open', 'pista1/players' : 'p1players', 'pista1/jugadorlanza' : 'p1lanza', 'pista1/accion' : 'p1accion',
-    //     'pista1/jugador1/nombre' : 'p1j1nombre', 'pista1/jugador1/puntostiro' : 'p1j1puntostiro', 'pista1/jugador1/puntostotales' : 'p1j1puntostotales',
-    //     'pista1/jugador2/nombre' : 'p1j2nombre', 'pista1/jugador2/puntostiro' : 'p1j2puntostiro', 'pista1/jugador2/puntostotales' : 'p1j2puntostotales',
-    //     'pista1/jugador3/nombre' : 'p1j3nombre', 'pista1/jugador3/puntostiro' : 'p1j3puntostiro', 'pista1/jugador3/puntostotales' : 'p1j3puntostotales',
-    //     'pista1/jugador4/nombre' : 'p1j4nombre', 'pista1/jugador4/puntostiro' : 'p1j4puntostiro', 'pista1/jugador4/puntostotales' : 'p1j4puntostotales',
-    //     'pista1/jugador5/nombre' : 'p1j5nombre', 'pista1/jugador5/puntostiro' : 'p1j5puntostiro', 'pista1/jugador5/puntostotales' : 'p1j5puntostotales',
-    //     'pista1/jugador6/nombre' : 'p1j6nombre', 'pista1/jugador6/puntostiro' : 'p1j6puntostiro', 'pista1/jugador6/puntostotales' : 'p1j6puntostotales',
-    // },
-    itemBase: {
-      player: "",
-      actual: "primero",
-      primero: { first: 0, second: 0, score: 0 },
-      segundo: { first: 0, second: 0, score: 0 },
-      tercero: { first: 0, second: 0, score: 0 },
-      cuarto: { first: 0, second: 0, score: 0 },
-      quinto: { first: 0, second: 0, score: 0 },
-      sexto: { first: 0, second: 0, score: 0 },
-      septimo: { first: 0, second: 0, score: 0 },
-      octavo: { first: 0, second: 0, score: 0 },
-      noveno: { first: 0, second: 0, score: 0 },
-      decimo: { first: 0, second: 0, third: 0 },
-      final: 0,
-    },
+    itemBase: JSON.parse(JSON.stringify(itemInicial)), // deep copy
     items: [
       //   { 'player': 'Dickerson Macdonald', 'actual': 'primero', 'primero':{first:0, second:0, score:0},  'segundo':{first:0 ,second:0, score:0}, 'tercero':{first:0 ,second:0, score:0}, 'cuarto':{first:0 ,second:0, score:0}, 'quinto':{first:0 ,second:0, score:0}, 'sexto':{first:0 ,second:0, score:0}, 'septimo':{first:0 ,second:0, score:0}, 'octavo':{first:0 ,second:0, score:0}, 'noveno':{first:0 ,second:0, score:0}, 'decimo':{first:0, second:0, third:0}, 'final':0 },
       //   { 'player': 'Larsen Shaw', 'actual': 'primero', 'primero':{first:0, second:0, score:0},  'segundo':{first:0 ,second:0, score:0}, 'tercero':{first:0 ,second:0, score:0}, 'cuarto':{first:0 ,second:0, score:0}, 'quinto':{first:0 ,second:0, score:0}, 'sexto':{first:0 ,second:0, score:0}, 'septimo':{first:0 ,second:0, score:0}, 'octavo':{first:0 ,second:0, score:0}, 'noveno':{first:0 ,second:0, score:0}, 'decimo':{first:0, second:0, third:0}, 'final':0 },
@@ -196,6 +210,11 @@ var app1 = new Vue({
         thClass: ["d-none"],
       },
     ],
+    // **** DEBUG *****
+    debugJugadores: 0,
+    debugLanzador: 0,
+    debugPuntos: [],
+    // **** DEBUG *****
   }, // --- End of data --- //
   computed: {
     hLastRcvd: function () {
@@ -252,155 +271,196 @@ var app1 = new Vue({
     }, // --- End of increment --- //
 
     parseNamePlayer(name) {
-      if (name.length >= 19) {
+      if (name && name.length >= 19) {
         return name.slice(0, 17) + "...";
       }
       return name;
     },
 
     animacionStrike() {
-      var vueApp = this;
-      // este es el strike que contiene el video o GIF
-      let $divStrike = document.querySelector("#strike");
-      let $divStrikeGif = document.querySelector("#strike img");
-      // acá obtenemos todos los elementos que harán la animación de la explosión y la palabra
-      let $divStrikeWord = document.querySelector("#strikeWord");
-      let $divStrikeWordH1 = document.querySelector("#strikeWord h1");
-      let $divStrikeWordBg = document.querySelector("#strikeWord img");
-      $divStrike.classList.remove("hide");
-      $divStrikeGif.classList.remove("hide");
-      let v = $("#strikeVideo");
+        var vueApp = this;
+        // este es el strike que contiene el video o GIF
+        let $divStrike = document.querySelector("#strike");
+        let $divStrikeGif = document.querySelector("#strike video");
+        // acá obtenemos todos los elementos que harán la animación de la explosión y la palabra
+        let $divStrikeWord = document.querySelector("#strikeWord");
+        let $divStrikeWordH1 = document.querySelector("#strikeWord h1");
+        let $divStrikeWordBg = document.querySelector("#strikeWord img");
+        
+        $divStrike.classList.remove("hide");
+        $divStrikeGif.classList.remove("hide");
+        
+        let flag = 0;
 
-      v.attr("src", vueApp.gifs.strike.src);
-
-      let flag = 0;
-
-      gsap.set($divStrikeWordH1, { rotate: "330deg" });
-      gsap.set($divStrikeWordBg, { rotate: "330deg" });
-      gsap.to($divStrikeGif, {
-        duration: 1,
-        scale: 105,
-        ease: "elastic", //scaleX:101, scaleY:101, ease:"elastic",
-        onComplete: () => {
-          // acá esperamos la reproducción del video y o bien seguimos con más animaciones, o bien ocultamos el div nuevamente
-        },
-      });
-      setTimeout(() => {
-        gsap.fromTo(
-          $divStrikeWordBg,
-          /* from */
-          {
+        $divStrikeGif.currentTime = 1.5;
+        gsap.set($divStrikeWordH1, { rotate: "330deg" });
+        gsap.set($divStrikeWordBg, { rotate: "330deg" });
+        gsap.fromTo($divStrikeGif, 
+        {  
             scale: 0.01,
-          },
-          /* To */
-          {
-            duration: 0.5,
-            scale: 2,
-            ease: "expo",
-            onStart: () => {
-              $divStrikeWordBg.classList.remove("hide");
-            },
-          }
-        );
-        gsap.fromTo(
-          $divStrikeWordH1,
-          {
-            scale: 6,
-          },
-          {
+        },
+        {
             duration: 1,
-            delay: 0.1,
-            scale: 1.8,
-            ease: "bounce",
-            onStart: () => {
-              $divStrikeWord.classList.remove("hide");
-            },
+            scale: 1,
+            ease: "elastic",
             onComplete: () => {
-              setTimeout(() => {
-                $divStrike.classList.add("hide");
-                $divStrikeGif.classList.add("hide");
-                $divStrikeGif.style.transform = null;
-                $divStrikeWord.classList.add("hide");
-                $divStrikeWordBg.classList.add("hide");
-                v.attr("src", null);
-              }, 2000);
+                let playPromise = $divStrikeGif.play();
+ 
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        // Automatic playback started!
+                        // Show playing UI.
+                        // We can now safely pause video...
+                        // video.pause();
+                    })
+                    .catch(error => {
+                        console.log({error});
+                        // Auto-play was prevented
+                        // Show paused UI.
+                    });
+                }
+              // acá esperamos la reproducción del video y o bien seguimos con más animaciones, o bien ocultamos el div nuevamente
             },
-          }
-        );
-      }, 3600);
+        });
+        setTimeout(() => {
+            gsap.fromTo(
+              $divStrikeWordBg,
+              /* from */
+              {
+                scale: 0.01,
+              },
+              /* To */
+              {
+                duration: 0.5,
+                scale: 2,
+                ease: "expo",
+                onStart: () => {
+                  $divStrikeWordBg.classList.remove("hide");
+                },
+              }
+            );
+            gsap.fromTo(
+              $divStrikeWordH1,
+              {
+                scale: 6,
+              },
+              {
+                duration: 1,
+                delay: 0.1,
+                scale: 1.8,
+                ease: "bounce",
+                onStart: () => {
+                  $divStrikeWord.classList.remove("hide");
+                },
+                onComplete: () => {
+                  setTimeout(() => {
+                    $divStrike.classList.add("hide");
+                    $divStrikeGif.classList.add("hide");
+                    $divStrikeGif.style.transform = null;
+                    $divStrikeWord.classList.add("hide");
+                    $divStrikeWordBg.classList.add("hide");
+                  }, 2000);
+                },
+              }
+            );
+        }, 3600);
     },
 
     animacionSpare() {
-      var vueApp = this;
-      // este es el strike que contiene el video o GIF
-      let $divSpare = document.querySelector("#spare");
-      let $divSpareGif = document.querySelector("#spare img");
-      // acá obtenemos todos los elementos que harán la animación de la explosión y la palabra
-      let $divSpareWord = document.querySelector("#spareWord");
-      let $divSpareWordH1 = document.querySelector("#spareWord h1");
-      let $divSpareWordBg = document.querySelector("#spareWord img");
-      $divSpare.classList.remove("hide");
-      $divSpareGif.classList.remove("hide");
+        var vueApp = this;
+        // este es el strike que contiene el video o GIF
+        let $divSpare = document.querySelector("#spare");
+        let $divSpareGif = document.querySelector("#spare video");
+        // acá obtenemos todos los elementos que harán la animación de la explosión y la palabra
+        let $divSpareWord = document.querySelector("#spareWord");
+        let $divSpareWordH1 = document.querySelector("#spareWord h1");
+        let $divSpareWordBg = document.querySelector("#spareWord img");
+        $divSpare.classList.remove("hide");
+        $divSpareGif.classList.remove("hide");
 
-      let v = $("#spareVideo");
-      v.attr("src", vueApp.gifs.spare.src);
-
-      gsap.set($divSpareWordH1, { rotate: "330deg" });
-      gsap.set($divSpareWordBg, { rotate: "330deg" });
-
-      gsap.to(
-        $divSpareGif,
-        { duration: 2, scale: 105, ease: "elastic" } //scaleX:101, scaleY:101, ease:"elastic",
-      );
-      setTimeout(() => {
+        gsap.set($divSpareWordH1, { rotate: "330deg" });
+        gsap.set($divSpareWordBg, { rotate: "330deg" });
+      
+        $divSpareGif.currentTime = 0.6;
+        
         gsap.fromTo(
-          $divSpareWordBg,
-          /* from */
-          {
-            scale: 0.01,
-          },
-          /* To */
-          {
-            duration: 0.5,
-            scale: 2,
-            ease: "expo",
-            onStart: () => {
-              $divSpareWordBg.classList.remove("hide");
+            $divSpareGif,
+            {   
+                scaleX: 0.01,
+                scaleY: 0.01,
             },
-          }
+            {   
+                duration: 2, 
+                scaleX: 1,
+                scaleY: 1,
+                ease: "elastic",
+                onComplete: () => {
+                    let playPromise = $divSpareGif.play();
+ 
+                    if (playPromise !== undefined) {
+                        playPromise.then(_ => {
+                            // Automatic playback started!
+                            // Show playing UI.
+                            // We can now safely pause video...
+                            setTimeout(() => {
+                                gsap.fromTo(
+                                  $divSpareWordBg,
+                                  /* from */
+                                  {
+                                    scale: 0.01,
+                                  },
+                                  /* To */
+                                  {
+                                    duration: 0.5,
+                                    scale: 2,
+                                    ease: "expo",
+                                    onStart: () => {
+                                        $divSpareWordBg.classList.remove("hide");
+                                    },
+                                  }
+                                );
+                                gsap.fromTo(
+                                  $divSpareWordH1,
+                                  {
+                                    scale: 6,
+                                  },
+                                  {
+                                    duration: 1,
+                                    delay: 0.1,
+                                    scale: 1.8,
+                                    ease: "elastic",
+                                    onStart: () => {
+                                        $divSpareWord.classList.remove("hide");
+                                    },
+                                    onComplete: () => {
+                                        setTimeout(() => {
+                                            $divSpare.classList.add("hide");
+                                            $divSpareGif.classList.add("hide");
+                                            $divSpareGif.style.transform = null;
+                                            $divSpareWord.classList.add("hide");
+                                            $divSpareWordBg.classList.add("hide");
+                                        }, 2000);
+                                    },
+                                  }
+                                );
+                            }, 2900);
+                        })
+                        .catch(error => {
+                            console.log({error});
+                            // Auto-play was prevented
+                            // Show paused UI.
+                        });
+                    }
+                    // acá esperamos la reproducción del video y o bien seguimos con más animaciones, o bien ocultamos el div nuevamente
+                }
+            } //scaleX:101, scaleY:101, ease:"elastic",
         );
-        gsap.fromTo(
-          $divSpareWordH1,
-          {
-            scale: 6,
-          },
-          {
-            duration: 1,
-            delay: 0.1,
-            scale: 1.8,
-            ease: "elastic",
-            onStart: () => {
-              $divSpareWord.classList.remove("hide");
-            },
-            onComplete: () => {
-              setTimeout(() => {
-                $divSpare.classList.add("hide");
-                $divSpareGif.classList.add("hide");
-                $divSpareGif.style.transform = null;
-                $divSpareWord.classList.add("hide");
-                $divSpareWordBg.classList.add("hide");
-                v.attr("src", null);
-              }, 2000);
-            },
-          }
-        );
-      }, 3100);
     },
 
     animacionFinish() {
       // este es el strike que contiene el video o GIF
       let $divFinish = document.querySelector("#finish");
-      let $divFinishGif = document.querySelector("#finish img");
+      let $divFinishGif = document.querySelector("#finish video");
       // acá obtenemos todos los elementos que harán la animación de la explosión y la palabra
       let $divFinishWord = document.querySelector("#finishWord");
       let $divFinishWordText = document.querySelector("#finishWord .textos");
@@ -411,8 +471,32 @@ var app1 = new Vue({
 
       gsap.fromTo(
         $divFinishGif,
-        { scaleX: 1, scaleY: 1 },
-        { duration: 0.75, scaleX: 105, scaleY: 110, ease: "expo" }
+        { 
+            scaleX: 0.05, 
+            scaleY: 0.05 
+        },
+        { 
+            duration: 0.75, scaleX: 1, scaleY: 1, ease: "expo",
+            onComplete: () => {
+                $divFinishGif.loop = true;
+                let playPromise = $divFinishGif.play();
+ 
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        // Automatic playback started!
+                        // Show playing UI.
+                        // We can now safely pause video...
+                        // video.pause();
+                    })
+                    .catch(error => {
+                        console.log({error});
+                        // Auto-play was prevented
+                        // Show paused UI.
+                    });
+                }
+              // acá esperamos la reproducción del video y o bien seguimos con más animaciones, o bien ocultamos el div nuevamente
+            }
+        }
       );
       gsap.from($divFinishWordText, {
         duration: 1,
@@ -428,30 +512,45 @@ var app1 = new Vue({
       var vueApp = this;
 
       let $divBolaFuera = document.querySelector("#bolaFuera");
-      let $divBolaFueraGif = document.querySelector("#bolaFuera img");
+      let $divBolaFueraGif = document.querySelector("#bolaFuera video");
 
       let $divBolaFueraWord = document.querySelector("#bolaFueraWord");
       let $divBolaFueraWordH1 = document.querySelector("#bolaFueraWord h1");
 
       $divBolaFuera.classList.remove("hide");
 
-      let v = $("#bolaFueraVideo");
-      v.attr("src", vueApp.gifs.bolaFuera.src);
-
+        $divBolaFueraGif.currentTime = 0.4;
+        
       gsap.fromTo(
         $divBolaFueraGif,
-        { scaleX: 1, scaleY: 1 },
+        { 
+            scale: 0.05
+        },
         {
           duration: 2,
-          scale: 105,
-          ease: "elastic", //scaleX:101, scaleY:101, ease:"elastic",
+          scale: 1,
+          ease: "elastic",
           onComplete: () => {
+            let playPromise = $divBolaFueraGif.play();
+ 
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Automatic playback started!
+                    // Show playing UI.
+                    // We can now safely pause video...
+                    // video.pause();
+                    setTimeout(() => {
+                        $divBolaFuera.classList.add("hide");
+                        $divBolaFueraWord.classList.add("hide");
+                    }, 3250);
+                })
+                .catch(error => {
+                    console.log({error});
+                    // Auto-play was prevented
+                    // Show paused UI.
+                });
+            }
             // acá esperamos la reproducción del video y o bien seguimos con más animaciones, o bien ocultamos el div nuevamente
-            setTimeout(() => {
-              $divBolaFuera.classList.add("hide");
-              $divBolaFueraWord.classList.add("hide");
-              v.attr("src", null);
-            }, 1650);
           },
         }
       );
@@ -460,10 +559,12 @@ var app1 = new Vue({
       setTimeout(() => {
         gsap.fromTo(
           $divBolaFueraWordH1,
-          { scale: 0.1 },
+          { 
+            scale: 0.05 
+          },
           {
             duration: 1,
-            scale: 1.2,
+            scale: 1,
             ease: "expo",
             onStart: () => {
               $divBolaFueraWord.classList.remove("hide");
@@ -475,36 +576,58 @@ var app1 = new Vue({
 
     // Espera
     animacionEspera() {
-      console.log("entro");
       var vueApp = this;
 
       // este es el strike que contiene el video o GIF
       let $divEspera = document.querySelector("#espera");
-      let $divEsperaGif = document.querySelector("#espera img");
+      let $divEsperaGif = document.querySelector("#espera video");
       let $divEsperaWord = document.querySelector("#esperaWord");
       let $divEsperaWordH1 = document.querySelector("#esperaWord h1");
       $divEspera.classList.remove("hide");
 
-      let v = $("#esperaVideo");
-      v.attr("src", vueApp.gifs.espera.src);
-
       gsap.fromTo(
         $divEsperaGif,
-        { scaleX: 1, scaleY: 1 },
-        { duration: 2, scaleX: 101, scaleY: 120, ease: "elastic" }
+        { 
+            scale: 0.05
+        },
+        {       
+            duration: 2, 
+            scale: 1, 
+            ease: "elastic",
+            onComplete: () => {
+                $divEsperaGif.loop = true;
+                let playPromise = $divEsperaGif.play();
+     
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        // Automatic playback started!
+                        // Show playing UI.
+                        // We can now safely pause video...
+                        // video.pause();
+                    })
+                    .catch(error => {
+                        console.log({error});
+                        // Auto-play was prevented
+                        // Show paused UI.
+                    });
+                }
+            }
+        }
       );
       setTimeout(() => {
         gsap.fromTo(
-          $divEsperaWordH1,
-          { scale: 0.1 },
-          {
-            duration: 1,
-            scale: 1.5,
-            ease: "expo",
-            onStart: () => {
-              $divEsperaWord.classList.remove("hide");
+            $divEsperaWordH1,
+            { 
+                scale: 0.05 
             },
-          }
+            {
+                duration: 1,
+                scale: 1,
+                ease: "expo",
+                onStart: () => {
+                  $divEsperaWord.classList.remove("hide");
+                },
+            }
         );
       }, 500);
     },
@@ -512,7 +635,7 @@ var app1 = new Vue({
     ocultarEspera() {
       let v = $("#esperaVideo");
       let $divEspera = document.querySelector("#espera");
-      let $divEsperaGif = document.querySelector("#espera img");
+      let $divEsperaGif = document.querySelector("#espera video");
       let $divEsperaWord = document.querySelector("#esperaWord");
       $divEspera.classList.add("hide");
       $divEsperaWord.classList.add("hide");
@@ -525,44 +648,60 @@ var app1 = new Vue({
       vueApp.ocultarEspera();
       // este es el strike que contiene el video o GIF
       let $divTiro = document.querySelector("#tirar");
-      let $divTiroGif = document.querySelector("#tirar img");
+      let $divTiroGif = document.querySelector("#tirar video");
       // acá obtenemos todos los elementos que harán la animación de la explosión y la palabra
       let $divTiroWord = document.querySelector("#tirarWord");
       let $divTiroWordH1 = document.querySelector("#tirarWord h1");
 
       $divTiro.classList.remove("hide");
 
-      let v = $("#tirarVideo");
-      v.attr("src", vueApp.gifs.tiro.src);
 
       gsap.fromTo(
         $divTiroGif,
-        { scaleX: 1, scaleY: 1 },
+        { 
+            scale: 0.05
+        },
         {
           duration: 2,
-          scaleX: 101,
-          scaleY: 150,
-          translateY: "200px",
+          scale: 1,
           ease: "elastic",
           onComplete: () => {
+            let playPromise = $divTiroGif.play();
+     
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Automatic playback started!
+                    // Show playing UI.
+                    // We can now safely pause video...
+                    setTimeout(() => {
+                        $divTiro.classList.add("hide");
+                        $divTiroWord.classList.add("hide");
+                        $divTiroGif.style.transform = null;
+                        $divTiroWord.style.transform = null;
+                        $divTiroGif.pause();
+                        $divTiroGif.currentTime = 0;
+                    }, 2000);
+                })
+                .catch(error => {
+                    console.log({error});
+                    // Auto-play was prevented
+                    // Show paused UI.
+                });
+            }
             // acá esperamos la reproducción del video y o bien seguimos con más animaciones, o bien ocultamos el div nuevamente
-            setTimeout(() => {
-              $divTiro.classList.add("hide");
-              $divTiroWord.classList.add("hide");
-              $divTiroGif.style.transform = null;
-              $divTiroWord.style.transform = null;
-              v.attr("src", null);
-            }, 2000);
+            
           },
         }
       );
       setTimeout(() => {
         gsap.fromTo(
           $divTiroWordH1,
-          { scale: 0.1 },
+          { 
+              scale: 0.05
+          },
           {
             duration: 1,
-            scale: 1.5,
+            scale: 1,
             ease: "expo",
             onStart: () => {
               $divTiroWord.classList.remove("hide");
@@ -600,13 +739,35 @@ var app1 = new Vue({
       return json;
     }, // --- End of syntaxHighlight --- //
 
+    cargarJugadores: function(cantidad){
+        var vueApp = this;
+        if (vueApp.items.length != parseInt(cantidad)) {
+          vueApp.items = [];
+        }
+        for (let i = 0; i < parseInt(cantidad); i++) {
+          vueApp.items.push(vueApp.itemVacio());
+        }
+        vueApp.values.players = parseInt(cantidad);
+    },
+
     elegirGanador: function () {
       var vueApp = this;
       let max = 0;
+      console.log('eligeGanador');
       vueApp.items.map((elem) => {
-        if (elem.final > max) {
-          max = elem.final;
-          vueApp.ganador = elem.player;
+        let tmpMax = 0;
+        console.log('entrando', { tmpMax });
+        if(elem.final !== ''){
+            tmpMax = elem.final;
+        }else{
+            tiros.forEach((tiro) => {
+                tmpMax += elem[tiro].score && elem[tiro].score !== '' ? parseInt(elem[tiro].score) : 0;
+            });
+        }
+        console.log({ tmpMax });
+        if (tmpMax > max) {
+            max = tmpMax;
+            vueApp.ganador = elem.player;
         }
       });
     },
@@ -621,43 +782,34 @@ var app1 = new Vue({
       let $divStatusPinos = document.querySelector("#statusPinos");
       $divStatusPinos.classList.add("hide");
       vueApp.divPinosOculto = true;
+      console.log('cerrar partida');
+      console.log('vueApp.values.open == true && estado == false', vueApp.values.open == true && estado == false);
+      console.log('vueApp.values.open', vueApp.values.open);
+      console.log('estado', estado);
+      
       if (vueApp.values.open === null && estado == true) {
         $divPublicidad.classList.add("hide");
       }
       if (vueApp.values.open == true && estado == false) {
         // después de un tiempo prudencial ocultamos el cartel de finalizado y volvemos a mostrar la publicidad, además tenemos que dejar todos los values como estaban en un ppio
+        console.log('cerrar partida');
+        vueApp.dispararAnimacion(vueApp.acciones.finalizado);
+        vueApp.items = vueApp.items.map((item)=>{
+            return vueApp.itemVacio();
+        });
         setTimeout(() => {
-          document.querySelector("#finish").classList.add("hide");
-          document.querySelector("#finish img").classList.add("hide");
-          document.querySelector("#finishWord").classList.add("hide");
-          $divPublicidad.classList.remove("hide");
-          vueApp.values = {
-            open: null,
-            players: 0,
-            jugadorlanza: "",
-            accion: "",
-            jugador1nombre: "",
-            jugador1puntostiro: "",
-            jugador1puntostotales: "",
-            jugador2nombre: "",
-            jugador2puntostiro: "",
-            jugador2puntostotales: "",
-            jugador3nombre: "",
-            jugador3puntostiro: "",
-            jugador3puntostotales: "",
-            jugador4nombre: "",
-            jugador4puntostiro: "",
-            jugador4puntostotales: "",
-            jugador5nombre: "",
-            jugador5puntostiro: "",
-            jugador5puntostotales: "",
-            jugador6nombre: "",
-            jugador6puntostiro: "",
-            jugador6puntostotales: "",
-          };
+            document.querySelector("#finish").classList.add("hide");
+            document.querySelector("#finish video").classList.add("hide");
+            document.querySelector("#finishWord").classList.add("hide");
+            $divPublicidad.classList.remove("hide");
+            vueApp.values = Object.assign({}, valuesInicial);
         }, 10000);
       }
       vueApp.values.open = estado;
+    },
+    
+    itemVacio: function (){
+        return JSON.parse(JSON.stringify(itemInicial));
     },
 
     pinos: function () {
@@ -688,7 +840,7 @@ var app1 = new Vue({
         case acciones.tiro:
           vueApp.animacionTiro();
           break;
-        case acciones.bolafuera:
+        case acciones.bolaFuera:
           vueApp.animacionBolaFuera();
           break;
         case acciones.finalizado:
@@ -699,19 +851,72 @@ var app1 = new Vue({
     },
 
     precargarGifs: function () {
-      var vueApp = this;
-      let elemento = document.createElement("div");
-      elemento.setAttribute("id", "imagenesPrecargadas");
-      for (let elem in vueApp.gifs) {
-        let img = document.createElement("img");
-        img.src = vueApp.gifs[elem].src;
-        elemento.append(img);
-      }
-      elemento.style = "display:none";
-      document.getElementById("app").append(elemento);
-      setTimeout(() => {
-        elemento.remove();
-      }, 2000);
+        var vueApp = this;
+        let elemento = document.createElement("div");
+        elemento.setAttribute("id", "imagenesPrecargadas");
+        for (let elem in vueApp.gifs) {
+            let video = document.createElement("video");
+            video.src = vueApp.gifs[elem].src;
+            elemento.append(video);
+        }
+        elemento.style = "display:none";
+        document.getElementById("app").append(elemento);
+        setTimeout(() => {
+            elemento.remove();
+        }, 2000);
+    },
+    
+    indicaLanzador: function(numeroJugador){
+        var vueApp = this;
+        vueApp.values[palabraClaveLanza] = parseInt(numeroJugador);    
+    },
+    
+    debugSetNombre: function(index){
+        var vueApp = this;
+        vueApp.setNombre(index, vueApp.items[index].player);
+    },
+    setNombre: function(index, nombre){
+        var vueApp = this;
+        let nroJugador = parseInt(index) + 1;
+        vueApp.values["jugador" + nroJugador.toString() + "nombre"] = nombre; // !! EN EL CASO DE ENTRAR POR EL FLUJO DE LA FUNCIÓN FILTERVALUES ESTO SERÁ REDUNDANTE
+        vueApp.items[index].player = nombre; // este valor ya está cargado al ppio de la función filterValues
+    },
+    
+    debugTiro: function(nroJugador){
+        var vueApp = this;
+        // jugador1puntostiro:N" y "pista1/jugadorN/puntostotalesN
+        
+        vueApp.values["jugador" + nroJugador.toString() + "puntostiro"] = parseInt(vueApp.debugPuntos[nroJugador-1]);
+        vueApp.gestionarTiro(nroJugador);
+    },
+    
+    gestionarTiro: function(nroJugador){
+        var vueApp = this;
+        const indexJugador   = nroJugador - 1; // dado que comienza en 0
+        let keyPuntosTiro    = "jugador" + nroJugador.toString() + "puntostiro"; //es la clave en el JSON values que queremos obtener para guardar en items, que es el array que se recorre para el tablero
+        let keyPuntosTotales = "jugador" + nroJugador.toString() + "puntostotales";
+        let nroTiro          = vueApp.items[indexJugador].actual;
+        // nroTiro es el turno que se esta jugando, son 10 turnos y dos tiros en cada turno a excepción del decimo que se tiran 3 veces
+        if (vueApp.items[indexJugador][nroTiro].first === '') {
+          vueApp.items[indexJugador][nroTiro].first = vueApp.values[keyPuntosTiro];
+          vueApp.items[indexJugador][nroTiro].score = vueApp.items[indexJugador][nroTiro].first;//vueApp.values[keyPuntosTotales];
+        } else if (vueApp.items[indexJugador][nroTiro].second === '') {
+          vueApp.items[indexJugador][nroTiro].second = vueApp.values[keyPuntosTiro];
+          vueApp.items[indexJugador][nroTiro].score  += vueApp.items[indexJugador][nroTiro].second;//vueApp.values[keyPuntosTotales];
+          // si el número de tiro no es el décimo, entonces cambiamos el turno de tiro del jugador aquí.
+          if (nroTiro != "decimo") {
+            let indexTiro                           = tiros.indexOf(nroTiro) + 1;
+            vueApp.items[indexJugador].actual       = tiros[indexTiro];
+            vueApp.values[keyPuntosTotales]         += vueApp.items[indexJugador][nroTiro].score;
+          }
+        } else if (vueApp.items[indexJugador][nroTiro].hasOwnProperty("third") && vueApp.items[indexJugador][nroTiro].third === '') {
+          //si es el decimo tiro y el turno 3 entonces tengo que completar este valor
+          vueApp.items[indexJugador][nroTiro].third = vueApp.values[keyPuntosTiro];
+          vueApp.items[indexJugador][nroTiro].score += vueApp.items[indexJugador][nroTiro].third;//vueApp.values[keyPuntosTotales];
+          vueApp.items[indexJugador].actual         = "";
+          vueApp.values[keyPuntosTotales]           += vueApp.items[indexJugador][nroTiro].score;
+          vueApp.items[indexJugador].final          = vueApp.values[keyPuntosTotales];
+        }
     },
 
     // los topic son de la forma pistaX/clave entonces debemos quitar la parte de pistaX ya que es todas las pistas tendrá el mismo comportamiento
@@ -720,7 +925,10 @@ var app1 = new Vue({
       arr.shift();
       return arr.join("");
     },
-
+    
+    payloadVal: function (payload){
+        return payload === 'true' || payload === 'false' ? payload ==='true' : payload;
+    },
     // lo que se pretende hacer aquí es filtrar los valores recibidos desde node-red
     // para esto se mapean los topics y se les asigna un key que será manejado de forma local,
     // en items
@@ -729,145 +937,45 @@ var app1 = new Vue({
       // obtenemos la accion clave que nos permitirá saber que se quiere hacer
       const claveAccion = vueApp.accionClave(json.topic);
       console.log("claveAccion", claveAccion);
-      vueApp.values[claveAccion] = json.payload;
-      const palabraClaveOpen = "open";
-      const palabraClavePlayers = "players";
-      const palabraClaveLanza = "jugadorlanza";
-      const palabraClaveNombre = "nombre";
-      const palabraClaveJugador = "jugador";
-      const palabraClavePuntos = "puntos";
-      const palabraClaveAccion = "accion";
-      let tiros = [
-        "primero",
-        "segundo",
-        "tercero",
-        "cuarto",
-        "quinto",
-        "sexto",
-        "septimo",
-        "octavo",
-        "noveno",
-        "decimo",
-      ];
+      const payload = vueApp.payloadVal(json.payload);
+      
+      if (claveAccion.indexOf(palabraClaveOpen) != -1) {
+        // payload en estos casos será true o false
+        vueApp.abrirJuego(payload);
+      }
+      vueApp.values[claveAccion] = payload;
 
       if (claveAccion.indexOf(palabraClaveAccion) != -1) {
         vueApp.dispararAnimacion(vueApp.values[claveAccion]);
       }
-      if (claveAccion.indexOf(palabraClaveOpen) != -1) {
-        // json.payload en estos casos será true o false
-        vueApp.abrirJuego(json.payload);
-      }
 
       // si el topic tiene la clave de la variable palabraClavePlayers entonces generamos el array Items con
-      // json.payload cantidad de objetos base que serán nuestros items, representacion de cada uno de los jugadores
+      // payload cantidad de objetos base que serán nuestros items, representacion de cada uno de los jugadores
       if (claveAccion.indexOf(palabraClavePlayers) != -1) {
-        if (vueApp.items.length != parseInt(json.payload)) {
-          vueApp.items = [];
-        }
-        for (let i = 0; i < parseInt(json.payload); i++) {
-          vueApp.items.push({
-            player: "",
-            actual: "primero",
-            primero: { first: 0, second: 0, score: 0 },
-            segundo: { first: 0, second: 0, score: 0 },
-            tercero: { first: 0, second: 0, score: 0 },
-            cuarto: { first: 0, second: 0, score: 0 },
-            quinto: { first: 0, second: 0, score: 0 },
-            sexto: { first: 0, second: 0, score: 0 },
-            septimo: { first: 0, second: 0, score: 0 },
-            octavo: { first: 0, second: 0, score: 0 },
-            noveno: { first: 0, second: 0, score: 0 },
-            decimo: { first: 0, second: 0, third: 0 },
-            final: 0,
-          });
-        }
+        vueApp.cargarJugadores(parseInt(payload));
       }
-      // si el topic tiene la clave jugador entonces genero un item en caso de que no exista, y obtengo el número de jugador
-      // console.log(claveAccion.indexOf(palabraClaveJugador) != -1);
-      // if(claveAccion.indexOf(palabraClaveJugador) != -1 && claveAccion.indexOf(palabraClaveLanza) == -1){
-      //     var nroJugador = parseInt(claveAccion.charAt(7))
-      //     var indexJugador = nroJugador - 1
-      //     // si el item no existe lo creamos y se renderizará
-      //     if(vueApp.items[indexJugador] === undefined){
-      //         // let obj = {}
-      //         // obj = Object.assign({}, vueApp.itemBase)
-      //         // vueApp.items.push({
-      //         vueApp.items[indexJugador] = {
-      //             'player': '',
-      //             'actual': 'primero',
-      //             'primero':{first:0, second:0, score:0},
-      //             'segundo':{first:0 ,second:0, score:0},
-      //             'tercero':{first:0 ,second:0, score:0},
-      //             'cuarto':{first:0 ,second:0, score:0},
-      //             'quinto':{first:0 ,second:0, score:0},
-      //             'sexto':{first:0 ,second:0, score:0},
-      //             'septimo':{first:0 ,second:0, score:0},
-      //             'octavo':{first:0 ,second:0, score:0},
-      //             'noveno':{first:0 ,second:0, score:0},
-      //             'decimo':{first:0, second:0, third:0},
-      //             'final':0
-      //         }
-      //         // })
-      //     }
-      // }
+      
       if (claveAccion.indexOf(palabraClaveLanza) != -1) {
-        vueApp.values[claveAccion] = parseInt(json.payload) - 1;
+        vueApp.indicaLanzador(parseInt(payload) - 1);
       }
 
-      // si el topic tiene la clave nombre entonces significa que tengo que guardar el nombre del jugador correspondiente, para eso ya tengo los indices en variable porque cuando tengo la clave nombre tambien tengo la clave jugador en la accion
+      // si el topic tiene la clave nombre entonces significa que tengo que guardar el nombre del jugador correspondiente, para eso ya tengo los 
+      // indices en variable porque cuando tengo la clave nombre tambien tengo la clave jugador en la accion
       if (claveAccion.indexOf(palabraClaveNombre) != -1) {
         // todos los topics que tienen info del tablero vienen con jugador primero, lo que me interesa obtener
-        // es la cifra que viene despues de jugador, la palabra jugador tiene 7 letras, por lo tanto interesa la posicion 7 (porque arranca desde 0, en realidad es el octavo caracter)
+        // es la cifra que viene despues de jugador, la palabra jugador tiene 7 letras, 
+        // por lo tanto interesa la posicion 7 (porque arranca desde 0, en realidad es el octavo caracter)
         const nroJugador = parseInt(claveAccion.charAt(7));
-        const indexJugador = nroJugador - 1;
-        console.log(vueApp.items);
-        vueApp.items[indexJugador].player =
-          vueApp.values["jugador" + nroJugador + "nombre"];
-
-        console.log(
-          "nombre jugador:-> ",
-          vueApp.values["jugador" + nroJugador + "nombre"]
-        );
+        const indexJugador = nroJugador - 1; // dado que comienza en 0
+        vueApp.setNombre(indexJugador, vueApp.values["jugador" + nroJugador + "nombre"]);
       }
-      // si el topic tiene la clave puntos entonces tambien tiene jugador por lo cual dispondremos de los indices de jugador, acá vamos completando los puntos del tablero
+      
+      // si el topic tiene la clave puntos entonces tambien tiene jugador por lo cual dispondremos de los indices de jugador, 
+      // acá vamos completando los puntos del tablero
       if (claveAccion.indexOf(palabraClavePuntos) != -1) {
-        let keyPuntosTiro = "jugador" + nroJugador + "puntostiro"; //es la clave en el JSON values que queremos obtener para guardar en items, que es el array que se recorre para el tablero
-        let keyPuntosTotales = "jugador" + nroJugador + "puntostotales";
-        let nroTiro = vueApp.items[indexJugador].actual;
-        // nroTiro es el turno que se esta jugando, son 10 turnos y dos tiros en cada turno a excepción del decimo que se tiran 3 veces
-        console.log("indexJugador", indexJugador);
-        console.log("nroJugador", nroJugador);
-        console.log("nroTiro", nroTiro);
-        console.log(
-          "vueApp.items[" + indexJugador + "][" + nroTiro + "].first"
-        );
-        console.log("itemjugador", vueApp.items[indexJugador][nroTiro]);
-        if (vueApp.items[indexJugador][nroTiro].first == 0) {
-          vueApp.items[indexJugador][nroTiro].first =
-            vueApp.values[keyPuntosTiro];
-          vueApp.items[indexJugador][nroTiro].score =
-            vueApp.values[keyPuntosTotales];
-        } else if (vueApp.items[indexJugador][nroTiro].second == 0) {
-          vueApp.items[indexJugador][nroTiro].second =
-            vueApp.values[keyPuntosTiro];
-          vueApp.items[indexJugador][nroTiro].score =
-            vueApp.values[keyPuntosTotales];
-          // si el número de tiro no es el décimo, entonces cambiamos el turno de tiro del jugador aquí.
-          if (nroTiro != "decimo") {
-            let indexTiro = tiros.indexOf(nroTiro) + 1;
-            vueApp.items[indexJugador].actual = tiros[indexTiro];
-          }
-        } else if (
-          vueApp.items[indexJugador][nroTiro].hasOwnProperty("third") &&
-          vueApp.items[indexJugador][nroTiro].third == 0
-        ) {
-          //si es el decimo tiro y el turno 3 entonces tengo que completar este valor
-          vueApp.items[indexJugador][nroTiro].third =
-            vueApp.values[keyPuntosTiro];
-          vueApp.items[indexJugador][nroTiro].score =
-            vueApp.values[keyPuntosTotales];
-          vueApp.items[indexJugador].actual = "";
-        }
+        // pista1/jugadorN/puntostiro:N
+        const nroJugador = parseInt(claveAccion.charAt(7));
+        vueApp.gestionarTiro(nroJugador);
       }
       console.log("items: ", vueApp.items);
       console.log("Values despues: ", vueApp.values);

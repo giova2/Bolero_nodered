@@ -26,3 +26,8 @@ body{
     background: linear-gradient(to bottom, #0000ff 0%,#934ddd 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0000ff', endColorstr='#934ddd',GradientType=0 ); /* IE6-9 */
 }
+
+.lanzador-debug:active, .lanzador-debug:focus{
+    background:yellow !important;
+    color:black !important;
+}

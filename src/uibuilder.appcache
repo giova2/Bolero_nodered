@@ -13,11 +13,12 @@ CACHE:
 # Required files
 images/node-blue-192x192.png
 images/node-blue.ico
-./images/strikeGif.gif
-./images/spare.gif
-./images/bola-fuera.gif
-./images/fallo.gif
-./images/falta.gif
+./images/strikeGif.webm
+./images/spare.webm
+./images/bola-fuera.webm
+./images/fallo.webm
+./images/falta.webm
+./images/tiro.webm
 
 /uibuilder/socket.io/socket.io.js
 # Replace this with the non .min version if needed
