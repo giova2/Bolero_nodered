@@ -15,11 +15,12 @@
 
 @font-face {
   font-family: "bolero";
-  src: url("bolero.woff2");
+  font-display: swap;
+  src: local('bolero.woff2'), url("bolero.woff2");
 }
 
 body{
-    font-family: 'bolero';
+    font-family: 'bolero', Arial-Black;
     background: #0000ff; /* Old browsers */
     background: -moz-linear-gradient(top, #0000ff 0%, #934ddd 100%); /* FF3.6-15 */
     background: -webkit-linear-gradient(top, #0000ff 0%,#934ddd 100%); /* Chrome10-25,Safari5.1-6 */

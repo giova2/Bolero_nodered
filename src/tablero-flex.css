@@ -1,6 +1,7 @@
 @font-face {
   font-family: "bolero";
-  src: url("bolero.woff2");
+  src: local('bolero.woff2'), url("bolero.woff2");
+  font-display: swap;
 }
 
 .tablero{
@@ -35,8 +36,9 @@
 .jugador p,
 .puntaje.final p,
 .puntaje.parcial p{
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     overflow-wrap: break-word;
+    margin-bottom: 0;
 }
 
 .puntaje.parcial{
@@ -67,12 +69,15 @@
 }
 
 /*defino la altura de las casillas que sirven para el puntaje parcial y la cantidad de pinos que se han volteado*/
-.tiro{
+.tiro, .puntos{
+    display: flex;
+    justify-content: center;
+    align-items:center;
     font-size:2.5rem;
 }
 
-.tiro p{
-    /*margin-top:auto;*/
+.tiro p, .puntos p{
+    /*margin-bottom: 0;*/
 }
 
 .tiro{
@@ -90,4 +95,12 @@
 
 .tiro.tercero{
     border-left:white solid 2px;
+}
+
+.tirador .tiro.tercero, .tirador .tiro.segundo{
+    border-left:black solid 2px;
+}
+
+.tirador .tiro{
+    border-bottom:black solid 2px;
 }

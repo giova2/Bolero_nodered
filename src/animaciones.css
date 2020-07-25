@@ -1,0 +1,144 @@
+.show {
+  opacity: 1;
+  visibility: visible;
+  z-index: 99;
+}
+.hide {
+  transition: all 0.5s ease-out;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.animacion {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.animacion h1 {
+  font-size: 10rem;
+  text-shadow: 5px 4px 4px blue;
+}
+.animacion h2 {
+  font-size: 5rem;
+  text-shadow: 5px 4px 4px blue;
+}
+
+.animacion video {
+  z-index: -1;
+}
+.animacion .img-container{
+    height:100%;
+}
+
+.animacion.bg {
+  background: transparent;
+  display: flex;
+}
+
+.animacion.text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.animacion.bg video {
+  align-self: center;
+  width: 100vw;
+}
+
+/* Animación STRIKE! */
+
+/* Acá se maneja el texto y la imagen de la explosión  */
+
+.animacion.strike {
+  overflow: hidden;
+}
+
+.animacion.strike h1 {
+  position: absolute;
+  left: 35vw;
+  top: 40vh;
+  font-size: 8.8rem;
+  /*z-index: 1;*/
+  text-shadow: 4px 4px 4px blue;
+}
+
+#strikeWord {
+  font-weight: 900;
+  color: white;
+}
+
+/* Animación STRIKE! */
+
+/* Animación SPARE */
+
+/* Acá se maneja el Gif que va por detrás  */
+
+/* Acá se maneja el texto y la imagen de la explosión  */
+
+.animacion.spare h1 {
+  position: absolute;
+  left: 35vw;
+  top: 40vh;
+}
+
+#spareWord {
+  font-weight: 900;
+  color: white;
+}
+
+/* Animación SPARE */
+
+/* Animación bola fuera */
+
+#bolaFueraWord {
+  font-weight: 900;
+  color: white;
+}
+
+/* Animación espera */
+
+#esperaWord {
+  font-weight: 900;
+  color: white;
+}
+
+/* Animación tirar */
+
+.animacion.tirar h1 {
+  text-align: center;
+  word-break: break-word;
+}
+
+#tirarWord {
+  font-weight: 900;
+  color: white;
+}
+
+/* Animación finalizacion de juego */
+
+.animacion.finish.bg {
+  background: #001;
+}
+
+.animacion.finish .textos {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+#finishWord {
+  font-weight: 900;
+  color: white;
+}
+
+/*a Animación finalizacion de juego */

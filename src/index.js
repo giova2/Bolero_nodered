@@ -217,6 +217,9 @@ var app1 = new Vue({
     // **** DEBUG *****
   }, // --- End of data --- //
   computed: {
+    rowJugadorHeight: function(){
+        return `height:${100/this.items.length}vh;`;  
+    },
     hLastRcvd: function () {
       var msgRecvd = this.msgRecvd;
       if (typeof msgRecvd === "string")
@@ -293,7 +296,7 @@ var app1 = new Vue({
         let flag = 0;
 
         $divStrikeGif.currentTime = 1.5;
-        gsap.set($divStrikeWordH1, { rotate: "330deg" });
+        gsap.set($divStrikeWordH1, { rotate: "327deg" });
         gsap.set($divStrikeWordBg, { rotate: "330deg" });
         gsap.fromTo($divStrikeGif, 
         {  
@@ -312,6 +315,49 @@ var app1 = new Vue({
                         // Show playing UI.
                         // We can now safely pause video...
                         // video.pause();
+                        setTimeout(() => {
+                            gsap.fromTo(
+                              $divStrikeWordBg,
+                              /* from */
+                              {
+                                scale: 0.01,
+                              },
+                              /* To */
+                              {
+                                duration: 0.5,
+                                scale: 2,
+                                ease: "expo",
+                                onStart: () => {
+                                  $divStrikeWordBg.classList.remove("hide");
+                                },
+                              }
+                            );
+                            gsap.fromTo(
+                              $divStrikeWordH1,
+                              {
+                                scale: 6,
+                              },
+                              {
+                                duration: 1,
+                                delay: 0.1,
+                                scaleX: 2,
+                                scaleY: 2.2,
+                                ease: "bounce",
+                                onStart: () => {
+                                  $divStrikeWord.classList.remove("hide");
+                                },
+                                onComplete: () => {
+                                  setTimeout(() => {
+                                    $divStrike.classList.add("hide");
+                                    $divStrikeGif.classList.add("hide");
+                                    $divStrikeGif.style.transform = null;
+                                    $divStrikeWord.classList.add("hide");
+                                    $divStrikeWordBg.classList.add("hide");
+                                  }, 2000);
+                                },
+                              }
+                            );
+                        }, 3600);
                     })
                     .catch(error => {
                         console.log({error});
@@ -322,48 +368,7 @@ var app1 = new Vue({
               // acá esperamos la reproducción del video y o bien seguimos con más animaciones, o bien ocultamos el div nuevamente
             },
         });
-        setTimeout(() => {
-            gsap.fromTo(
-              $divStrikeWordBg,
-              /* from */
-              {
-                scale: 0.01,
-              },
-              /* To */
-              {
-                duration: 0.5,
-                scale: 2,
-                ease: "expo",
-                onStart: () => {
-                  $divStrikeWordBg.classList.remove("hide");
-                },
-              }
-            );
-            gsap.fromTo(
-              $divStrikeWordH1,
-              {
-                scale: 6,
-              },
-              {
-                duration: 1,
-                delay: 0.1,
-                scale: 1.8,
-                ease: "bounce",
-                onStart: () => {
-                  $divStrikeWord.classList.remove("hide");
-                },
-                onComplete: () => {
-                  setTimeout(() => {
-                    $divStrike.classList.add("hide");
-                    $divStrikeGif.classList.add("hide");
-                    $divStrikeGif.style.transform = null;
-                    $divStrikeWord.classList.add("hide");
-                    $divStrikeWordBg.classList.add("hide");
-                  }, 2000);
-                },
-              }
-            );
-        }, 3600);
+        
     },
 
     animacionSpare() {
@@ -378,7 +383,7 @@ var app1 = new Vue({
         $divSpare.classList.remove("hide");
         $divSpareGif.classList.remove("hide");
 
-        gsap.set($divSpareWordH1, { rotate: "330deg" });
+        gsap.set($divSpareWordH1, { rotate: "327deg" });
         gsap.set($divSpareWordBg, { rotate: "330deg" });
       
         $divSpareGif.currentTime = 0.6;
@@ -427,7 +432,8 @@ var app1 = new Vue({
                                   {
                                     duration: 1,
                                     delay: 0.1,
-                                    scale: 1.8,
+                                    scaleX: 2,
+                                    scaleY: 2.2,
                                     ease: "elastic",
                                     onStart: () => {
                                         $divSpareWord.classList.remove("hide");
@@ -997,7 +1003,7 @@ var app1 = new Vue({
 
     // Example of retrieving data from uibuilder
     vueApp.feVersion = uibuilder.get("version");
-    vueApp.precargarGifs();
+    // vueApp.precargarGifs();
 
     /** You can use the following to help trace how messages flow back and forth.
      * You can then amend this processing to suite your requirements.

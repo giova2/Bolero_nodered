@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Note that adding an appcache really speeds things up after the first load
+<!-- Notse that adding an appcache really speeds things up after the first load
     You need to amend the appcache file to meet your needs.
     Don't forget to change the appcache file if you update ANY
     of the files in it otherwise the old versions will ALWAYS be used.
@@ -47,31 +47,65 @@
     />
     <meta name="apple-mobile-web-app-title" content="Node-RED UI Builder" />
 
-    <link rel="preload" as="video" href="./images/spare.webm" type="video/webm" />
-    <link rel="preload" as="video" href="./images/tiro.webm" type="video/webm" />
-    <link rel="preload" as="video" href="./images/espera.webm" type="video/webm" />
-    <link rel="preload" as="video" href="./images/bola-fuera.webm" type="video/webm" />
-    <link rel="preload" as="video" href="./images/strikeGif.webm" type="video/webm" />
-    <link rel="preload" as="video" href="./images/finish.webm"  type="video/webm" />
-    <link rel="preload" as="font"  href="bolero.woff2" type="font/woff2" crossorigin>
-    
-    <link rel="preload" as="script" href="../uibuilder/vendor/socket.io/socket.io.js" />
-    <link rel="preload" as="script" href="../uibuilder/vendor/vue/dist/vue.min.js" />
-    <link rel="preload" as="script" href="../uibuilder/vendor/bootstrap-vue/dist/bootstrap-vue.min.js"/>
-    <link rel="preload" as="script" href="../uibuilder/vendor/gsap/dist/gsap.min.js"/>
-    <link rel="preload" as="script" href="../uibuilder/vendor/jquery/dist/jquery.min.js"/>
-    <link rel="preload" as="script" href="./uibuilderfe.min.js"/>
-    <link rel="preload" as="script" href="./index.js"/>
-    
-    <link rel="preload" as="style" href="../uibuilder/vendor/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="preload" as="style" href="../uibuilder/vendor/bootstrap-vue/dist/bootstrap-vue.min.css" />
+    <!--<link rel="preload" as="video" href="./images/spare.webm" type="video/webm" />-->
+    <!--<link rel="preload" as="video" href="./images/tiro.webm" type="video/webm" />-->
+    <!--<link rel="preload" as="video" href="./images/espera.webm" type="video/webm" />-->
+    <!--<link rel="preload" as="video" href="./images/bola-fuera.webm" type="video/webm" />-->
+    <!--<link rel="preload" as="video" href="./images/strikeGif.webm" type="video/webm" />-->
+    <!--<link rel="preload" as="video" href="./images/finish.webm"  type="video/webm" />-->
+    <link
+      rel="preload"
+      as="font"
+      href="bolero.woff2"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <link
+      rel="preload"
+      as="script"
+      href="../uibuilder/vendor/socket.io/socket.io.js"
+    />
+    <link
+      rel="preload"
+      as="script"
+      href="../uibuilder/vendor/vue/dist/vue.min.js"
+    />
+    <link
+      rel="preload"
+      as="script"
+      href="../uibuilder/vendor/bootstrap-vue/dist/bootstrap-vue.min.js"
+    />
+    <link
+      rel="preload"
+      as="script"
+      href="../uibuilder/vendor/gsap/dist/gsap.min.js"
+    />
+    <link
+      rel="preload"
+      as="script"
+      href="../uibuilder/vendor/jquery/dist/jquery.min.js"
+    />
+    <link rel="preload" as="script" href="./uibuilderfe.min.js" />
+    <link rel="preload" as="script" href="./index.js" />
+
+    <link
+      rel="preload"
+      as="style"
+      href="../uibuilder/vendor/bootstrap/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="preload"
+      as="style"
+      href="../uibuilder/vendor/bootstrap-vue/dist/bootstrap-vue.min.css"
+    />
     <link rel="preload" as="style" href="./publicidad.css" />
     <link rel="preload" as="style" href="./index.css" />
     <link rel="preload" as="style" href="./animate.css" />
-    <link rel="preload" as="style" href="./tablero-flex.css"  />
-    <link rel="preload" as="style" href="./pinos.css"  />
-    <link rel="preload" as="style" href="./animaciones-beta.css" />
-    
+    <link rel="preload" as="style" href="./tablero-flex.css" />
+    <link rel="preload" as="style" href="./pinos.css" />
+    <link rel="preload" as="style" href="./animaciones.css" />
+
     <link
       type="text/css"
       rel="stylesheet"
@@ -88,22 +122,23 @@
     <link rel="stylesheet" href="./animate.css" />
     <link rel="stylesheet" href="./tablero-flex.css" media="all" />
     <link rel="stylesheet" href="./pinos.css" media="all" />
-    <link rel="stylesheet" href="./animaciones-beta.css" media="all" />
+    <link rel="stylesheet" href="./animaciones.css" media="all" />
   </head>
   <body>
+    <!-- ************************************* Publicidad *************************************-->
+    <div id="publicidad" class="">
+      <h1 style="position: absolute; top: 45vh; left: 10vw;">
+        Este div se muestra hasta que se abra el juego
+      </h1>
+    </div>
+    <!-- ************************************* Publicidad *************************************-->
     <div id="app" v-cloak>
-        <!-- ************************************* Publicidad *************************************-->
-          <div id="publicidad" class="">
-            <h1 style="position: absolute; top: 45vh; left: 10vw;">
-              Este div se muestra hasta que se abra el juego
-            </h1>
-          </div>
-          <!-- ************************************* Publicidad *************************************-->
       <div class="d-flex flex-column tablero">
         <div
           v-for="(item, index) in items"
           :key="index"
           class="info-jugador d-flex flex-row"
+          :style="rowJugadorHeight"
           v-bind:class="{ tirador: values.jugadorlanza !== '' && index == values.jugadorlanza }"
           v-bind:data-jugador="item.player"
         >
@@ -120,8 +155,8 @@
                 <p>{{ item.primero.second}}</p>
               </div>
             </div>
-            <div>
-              <p class="puntos">{{ item.primero.score }}</p>
+            <div class="puntos">
+              <p>{{ item.primero.score }}</p>
             </div>
           </div>
           <div class="puntaje parcial">
@@ -133,8 +168,8 @@
                 <p>{{ item.segundo.second}}</p>
               </div>
             </div>
-            <div>
-              <p class="puntos">{{ item.segundo.score }}</p>
+            <div class="puntos">
+              <p>{{ item.segundo.score }}</p>
             </div>
           </div>
           <div class="puntaje parcial">
@@ -146,8 +181,8 @@
                 <p>{{ item.tercero.second}}</p>
               </div>
             </div>
-            <div>
-              <p class="puntos">{{ item.tercero.score }}</p>
+            <div class="puntos">
+              <p>{{ item.tercero.score }}</p>
             </div>
           </div>
           <div class="puntaje parcial">
@@ -159,8 +194,8 @@
                 <p>{{ item.cuarto.second}}</p>
               </div>
             </div>
-            <div>
-              <p class="puntos">{{ item.cuarto.score }}</p>
+            <div class="puntos">
+              <p>{{ item.cuarto.score }}</p>
             </div>
           </div>
           <div class="puntaje parcial">
@@ -172,8 +207,8 @@
                 <p>{{ item.quinto.second}}</p>
               </div>
             </div>
-            <div>
-              <p class="puntos">{{ item.quinto.score }}</p>
+            <div class="puntos">
+              <p>{{ item.quinto.score }}</p>
             </div>
           </div>
           <div class="puntaje parcial">
@@ -185,8 +220,8 @@
                 <p>{{ item.sexto.second}}</p>
               </div>
             </div>
-            <div>
-              <p class="puntos">{{ item.sexto.score }}</p>
+            <div class="puntos">
+              <p>{{ item.sexto.score }}</p>
             </div>
           </div>
           <div class="puntaje parcial">
@@ -198,8 +233,8 @@
                 <p>{{ item.septimo.second}}</p>
               </div>
             </div>
-            <div>
-              <p class="puntos">{{ item.septimo.score }}</p>
+            <div class="puntos">
+              <p>{{ item.septimo.score }}</p>
             </div>
           </div>
           <div class="puntaje parcial">
@@ -211,8 +246,8 @@
                 <p>{{ item.octavo.second }}</p>
               </div>
             </div>
-            <div>
-              <p class="puntos">{{ item.octavo.score }}</p>
+            <div class="puntos">
+              <p>{{ item.octavo.score }}</p>
             </div>
           </div>
           <div class="puntaje parcial">
@@ -224,8 +259,8 @@
                 <p>{{ item.noveno.second }}</p>
               </div>
             </div>
-            <div>
-              <p class="puntos">{{ item.noveno.score }}</p>
+            <div class="puntos">
+              <p>{{ item.noveno.score }}</p>
             </div>
           </div>
           <div class="puntaje parcial">
@@ -240,8 +275,8 @@
                 <p>{{ item.decimo.third }}</p>
               </div>
             </div>
-            <div>
-              <p class="puntos">{{ item.decimo.score }}</p>
+            <div class="puntos">
+              <p>{{ item.decimo.score }}</p>
             </div>
           </div>
           <div class="puntaje final align-self-center">
@@ -251,39 +286,39 @@
       </div>
 
       <!-- ************************************* animaciones *************************************-->
-      
+
       <!-- ************************************* BOTONERA ************************************* -->
       <div class="d-flex">
         <label>Animaciones</label>
         <div class="m-2">
-        <b-button @click="animacionStrike" variant="success">
-          Strike!
-        </b-button>
+          <b-button @click="animacionStrike" variant="success">
+            Strike!
+          </b-button>
         </div>
         <div class="m-2">
-        <b-button @click="animacionSpare" variant="info">
-          Spare!
-        </b-button>
+          <b-button @click="animacionSpare" variant="info">
+            Spare!
+          </b-button>
         </div>
         <div class="m-2">
-        <b-button @click="animacionFinish" variant="primary">
-          Final de juego
-        </b-button>
+          <b-button @click="animacionFinish" variant="primary">
+            Final de juego
+          </b-button>
         </div>
         <div class="m-2">
-        <b-button @click="animacionBolaFuera" variant="primary">
-          Bola Fuera
-        </b-button>
+          <b-button @click="animacionBolaFuera" variant="primary">
+            Bola Fuera
+          </b-button>
         </div>
         <div class="m-2">
-        <b-button @click="animacionEspera" variant="secondary">
-          Espera
-        </b-button>
+          <b-button @click="animacionEspera" variant="secondary">
+            Espera
+          </b-button>
         </div>
         <div class="m-2">
-        <b-button @click="animacionTiro" variant="danger">
-          Tiro
-        </b-button>
+          <b-button @click="animacionTiro" variant="danger">
+            Tiro
+          </b-button>
         </div>
       </div>
       <div class="d-flex">
@@ -292,110 +327,146 @@
           {{ divPinosOculto ? 'Ver pinos' : 'Ocultar pinos'}}
         </b-button>
       </div>
-        <div class="d-flex flex-row justify-content-center">
-            <div class="m-2">
-                <h4>Flujo del juego</h4>
-            </div>  
-        </div>  
-        <div class="d-flex">
-            <div class="m-2">
-                <b-button @click="abrirJuego(true)" variant="success">
-                  Comenzar Juego
-                </b-button>
-            </div>
-            <div class="m-2">
-                <b-button @click="abrirJuego(false)" variant="danger">
-                  Terminar Juego
-                </b-button>
-            </div>
+      <div class="d-flex flex-row justify-content-center">
+        <div class="m-2">
+          <h4>Flujo del juego</h4>
         </div>
-      
-        <div class="d-flex flex-row justify-content-center">
-            <div class="m-2">
-                <select class="form-control" v-model="debugJugadores">
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                </select>
-                <b-button @click="cargarJugadores(debugJugadores)" variant="success">
-                  Cargar Jugadores
-                </b-button>
-            </div>
-            <div class="d-flex flex-row flex-wrap justify-content-center">
-                <div v-for="(item, index) in items" :key="index">
-                    <div class="m-2">
-                        <input placeholder="Cargue el nombre del jugador" class="form-control" type="text" v-model="item.player" @keyup="debugSetNombre(index)"/>
-                    </div>        
-                </div>
-            </div>
+      </div>
+      <div class="d-flex">
+        <div class="m-2">
+          <b-button @click="abrirJuego(true)" variant="success">
+            Comenzar Juego
+          </b-button>
         </div>
-        <div class="d-flex justify-content-center">
-            <div class="m-2 text-center" v-show="items.length > 0">
-                <h5>Indique quien va a lanzar</h5>
-                <div class="d-flex flex-row justify-content-center">
-                    <div v-for="(item, index) in items" :key="index" class="m-2">
-                        <b-button @click="indicaLanzador(index)" variant="success" class="lanzador-debug" v-show="item.player !== ''">
-                            {{ item.player }}
-                        </b-button>
-                    </div>
-                </div>
-            </div>
+        <div class="m-2">
+          <b-button @click="abrirJuego(false)" variant="danger">
+            Terminar Juego
+          </b-button>
         </div>
-        
-        <div class="d-flex justify-content-center">
-            <div class="m-2 text-center" v-show="items.length > 0">
-                <h5>Simulación de juego</h5>
-                <div class="d-flex flex-row flex-wrap">
-                    <div v-for="(item, index) in items" :key="index" class="m-2">
-                        <select v-model="debugPuntos[index]" class="form-control">
-                            <option value="0">0 (este valor se representa como 0 después del disparo)</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                        </select>
-                        <b-button @click="debugTiro(index+1)" variant="success" v-show="item.player !== ''">
-                          Simular Tiro {{item.player}}
-                        </b-button>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
 
-    <!-- ************************************* BOTONERA ************************************* -->
+      <div class="d-flex flex-row justify-content-center">
+        <div class="m-2">
+          <select class="form-control" v-model="debugJugadores">
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+          </select>
+          <b-button @click="cargarJugadores(debugJugadores)" variant="success">
+            Cargar Jugadores
+          </b-button>
+        </div>
+        <div class="d-flex flex-row flex-wrap justify-content-center">
+          <div v-for="(item, index) in items" :key="index">
+            <div class="m-2">
+              <input
+                placeholder="Cargue el nombre del jugador"
+                class="form-control"
+                type="text"
+                v-model="item.player"
+                @keyup="debugSetNombre(index)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center">
+        <div class="m-2 text-center" v-show="items.length > 0">
+          <h5>Indique quien va a lanzar</h5>
+          <div class="d-flex flex-row justify-content-center">
+            <div v-for="(item, index) in items" :key="index" class="m-2">
+              <b-button
+                @click="indicaLanzador(index)"
+                variant="success"
+                class="lanzador-debug"
+                v-show="item.player !== ''"
+              >
+                {{ item.player }}
+              </b-button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <div class="m-2 text-center" v-show="items.length > 0">
+          <h5>Simulación de juego</h5>
+          <div class="d-flex flex-row flex-wrap">
+            <div v-for="(item, index) in items" :key="index" class="m-2">
+              <select v-model="debugPuntos[index]" class="form-control">
+                <option value="0"
+                  >0 (este valor se representa como 0 después del
+                  disparo)</option
+                >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+              <b-button
+                @click="debugTiro(index+1)"
+                variant="success"
+                v-show="item.player !== ''"
+              >
+                Simular Tiro {{item.player}}
+              </b-button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ************************************* BOTONERA ************************************* -->
 
       <div id="strike" class="hide animacion strike bg">
-        <video id="strikeVideo" :src="gifs.strike.src" muted="muted" preload="auto"></video>
+        <video
+          id="strikeVideo"
+          :src="gifs.strike.src"
+          muted="muted"
+          preload="auto"
+          type="video/webm"
+        ></video>
         <!--<img id="strikeVideo" src="" />-->
       </div>
       <div id="strikeWord" class="hide animacion strike">
-        <div class="d-flex justify-content-center">
-            <img class="hide" src="./images/comic-boom.png" />
+        <div class="d-flex justify-content-center align-items-center img-container">
+          <img class="hide" src="./images/comic-boom.png" />
         </div>
         <h1>STRIKE!!</h1>
       </div>
 
       <div id="spare" class="hide animacion spare bg">
-          <video id="spareVideo" :src="gifs.spare.src" muted="muted" preload="auto"></video>
+        <video
+          id="spareVideo"
+          :src="gifs.spare.src"
+          muted="muted"
+          preload="auto"
+          type="video/webm"
+        ></video>
         <!--<img id="spareVideo" src="" />-->
       </div>
       <div id="spareWord" class="hide animacion spare">
-        <div class="d-flex justify-content-center">
-            <img class="hide" src="./images/comic-boom.png" />
+        <div class="d-flex justify-content-center align-items-center img-container">
+          <img class="hide" src="./images/comic-boom.png" />
         </div>
         <h1>SPARE!</h1>
       </div>
 
       <div id="finish" class="hide animacion finish bg">
-        <video id="finishVideo" :src="gifs.finish.src" muted="muted" preload="auto"></video>
+        <video
+          id="finishVideo"
+          :src="gifs.finish.src"
+          muted="muted"
+          preload="auto"
+          type="video/webm"
+        ></video>
         <!--<img id="finishVideo" src="./images/finish.gif" />-->
       </div>
       <div id="finishWord" class="hide animacion finish">
@@ -406,7 +477,13 @@
       </div>
 
       <div id="bolaFuera" class="hide animacion bola-fuera bg">
-        <video id="bolaFueraVideo" :src="gifs.bolaFuera.src" muted="muted" preload="auto"></video>
+        <video
+          id="bolaFueraVideo"
+          :src="gifs.bolaFuera.src"
+          muted="muted"
+          preload="auto"
+          type="video/webm"
+        ></video>
         <!--<img id="bolaFueraVideo" src="" />-->
       </div>
       <div id="bolaFueraWord" class="hide animacion text bola-fuera">
@@ -414,7 +491,13 @@
       </div>
 
       <div id="espera" class="hide animacion espera bg">
-        <video id="esperaVideo" :src="gifs.espera.src" muted="muted" preload="auto"></video>
+        <video
+          id="esperaVideo"
+          :src="gifs.espera.src"
+          muted="muted"
+          preload="auto"
+          type="video/webm"
+        ></video>
         <!--<img id="esperaVideo" src="" />-->
       </div>
       <div id="esperaWord" class="hide animacion text espera">
@@ -422,11 +505,21 @@
       </div>
 
       <div id="tirar" class="hide animacion tirar bg">
-        <video id="tirarVideo" :src="gifs.tirar.src" muted="muted" preload="auto"></video>
+        <video
+          id="tirarVideo"
+          :src="gifs.tirar.src"
+          muted="muted"
+          preload="auto"
+          type="video/webm"
+        ></video>
         <!--<img id="tirarVideo" src="" />-->
       </div>
       <div id="tirarWord" class="hide animacion text tirar">
-        <h1>Tiro {{ parseNamePlayer(values['jugador'+(parseInt(values.jugadorlanza)+1).toString()+'nombre']) }}</h1>
+        <h1>
+          Tiro {{
+          parseNamePlayer(values['jugador'+(parseInt(values.jugadorlanza)+1).toString()+'nombre'])
+          }}
+        </h1>
       </div>
 
       <!-- ************************************* animaciones *************************************-->
@@ -560,7 +653,8 @@
     <!-- Vendor Libraries - Load in the right order -->
     <!--<script src="../uibuilder/vendor/vue/dist/vue.js"></script>-->
     <!-- dev version with component compiler -->
-    <script src="../uibuilder/vendor/vue/dist/vue.min.js"></script>   <!-- prod version with component compiler  -->
+    <script src="../uibuilder/vendor/vue/dist/vue.min.js"></script>
+    <!-- prod version with component compiler  -->
     <!-- <script src="../uibuilder/vendor/vue/dist/vue.runtime.min.js"></script>   prod version without component compiler -->
     <script src="../uibuilder/vendor/bootstrap-vue/dist/bootstrap-vue.min.js"></script>
     <script src="../uibuilder/vendor/gsap/dist/gsap.min.js"></script>

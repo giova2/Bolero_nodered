@@ -13,19 +13,30 @@ CACHE:
 # Required files
 images/node-blue-192x192.png
 images/node-blue.ico
-./images/strikeGif.webm
-./images/spare.webm
-./images/bola-fuera.webm
-./images/fallo.webm
-./images/falta.webm
-./images/tiro.webm
+images/strikeGif.webm
+images/spare.webm
+images/bola-fuera.webm
+images/finish.webm
+images/tiro.webm
+images/espera.webm
 
 /uibuilder/socket.io/socket.io.js
 # Replace this with the non .min version if needed
 uibuilderfe.min.js
 # Specific for our app
-index.css
-index.js
+/uibuilder/jquery/dist/jquery.min.js
+/uibuilder/vue/dist/vue.min.js
+/uibuilder/bootstrap-vue/dist/bootstrap-vue.min.js
+/uibuilder/gsap/dist/gsap.min.js
+./index.html
+./index.css
+./index.js
+./bolero.woff2
+./animaciones-beta.css
+./animate.css
+./pinos.css
+./publicidad.css
+./tablero-flex.css
 # Local vendor libraries
 vendor/normalize.css/normalize.css
 # Useful utility libraries
